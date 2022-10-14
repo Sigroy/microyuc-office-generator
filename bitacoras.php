@@ -1,5 +1,5 @@
 <?php
-require_once './config/db_connect.php';
+require './config/db_connect.php';
 require './includes/functions.php';
 
 check_login();
