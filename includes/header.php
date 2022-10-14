@@ -5,6 +5,7 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="description" content="Generador de cartas y bitácoras de pagos de créditos vencidos de Microyuc.">
     <link rel="stylesheet" href="./dist/css/styles.css">
     <link rel="icon" type="image/x-icon" href="./favicon.ico">
     <title>Microyuc | <?= $header_title ?? ''?></title>
