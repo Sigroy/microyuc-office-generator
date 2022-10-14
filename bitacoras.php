@@ -19,8 +19,10 @@ $statement = $pdo->query($sql);
 $bitacoras = $statement->fetchAll();
 
 // Revisa si la string de consulta tiene un id para eliminar la bitácora de la base de datos y del directorio
-if (isset($_GET['id'])) {
-    $id = $_GET['id'];
+// Recibir y validar id
+$id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+
+if ($id) {
     try {
         // Consulta para recibir los datos de la bitácora a eliminar eliminar
         $sql = "SELECT * FROM bitacora WHERE id = :id;";

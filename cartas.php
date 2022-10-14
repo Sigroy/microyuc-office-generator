@@ -19,8 +19,10 @@ $statement = $pdo->query($sql);
 $cartas = $statement->fetchAll();
 
 // Revisa si la string de consulta tiene un id para eliminar la carta de la base de datos y del directorio
-if (isset($_GET['id'])) {
-    $id = $_GET['id'];
+// Recibir y validar id
+$id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+
+if ($id) {
     try {
         // Consulta para recibir el nombre del archivo a eliminar
         $sql = "SELECT nombre_archivo FROM carta WHERE id = :id";
