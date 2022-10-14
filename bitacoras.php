@@ -2,48 +2,70 @@
 require_once './config/db_connect.php';
 require './includes/functions.php';
 
+check_login();
+
 $sidebar_active = 'bitácora';
 $header_title = 'Panel de bitácoras';
 
-require './includes/header.php';
+// Consulta para recibir el número de bitácoras
+$sql = "SELECT COUNT(*) FROM bitacora";
+$statement = $pdo->query($sql);
+$num_bitacoras = $statement->fetchColumn();
 
-check_login();
+// Consulta para generar el panel de bitácoras
+$sql = "SELECT id, acreditado_nombre, acreditado_folio, acreditado_telefono, acreditado_email, fecha_creacion,
+       nombre_archivo FROM bitacora ORDER BY id DESC;";
+$statement = $pdo->query($sql);
+$bitacoras = $statement->fetchAll();
 
-// Write query for all acreditados
-$sql = 'SELECT id, acreditado_nombre, acreditado_folio, acreditado_telefono, acreditado_email, gestion_fecha1, gestion_via1, fecha_creacion, nombre_archivo FROM bitacora ORDER BY id DESC;';
-
-// make query and & get result
-$result = mysqli_query($conn, $sql);
-
-// Fetch the resulting rows as an array
-$bitacoras = mysqli_fetch_all($result, MYSQLI_ASSOC);
-
+// Revisa si la string de consulta tiene un id para eliminar la bitácora de la base de datos y del directorio
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
-    $resultado_imagen = mysqli_query($conn, "SELECT evidencia_fotografia1 FROM bitacora WHERE id = '$id';");
-    $imagename = $resultado_imagen->fetch_array()['evidencia_fotografia1'] ?? '';
-    $resultado_archivo = mysqli_query($conn, "SELECT nombre_archivo FROM bitacora WHERE id = '$id';");
-    $filename = $resultado_archivo->fetch_array()['nombre_archivo'] ?? '';
-    $delete = mysqli_query($conn, "DELETE FROM bitacora WHERE id = '$id';");
-    unlink('./files/bitacoras/' . $filename);
-    unlink('./uploads/' . $imagename);
-    header('Location: bitacoras.php');
+    try {
+        // Consulta para recibir los datos de la bitácora a eliminar eliminar
+        $sql = "SELECT * FROM bitacora WHERE id = :id;";
+        $statement = $pdo->prepare($sql);
+        $statement->execute([$id]);
+        $bitacora = $statement->fetch();
+
+        // Devuelve todas las claves del arreglo de la bitácora para saber cuántas gestiones tiene la bitácora
+        $claves = array_keys($bitacora);
+        $contador = 0;
+        foreach ($claves as $clave) {
+            if (str_contains($clave, "evidencia_fotografia")) {
+                $contador++;
+            }
+        }
+
+        // Sentencia para borrar la bitácora en la base de datos
+        $sql = "DELETE FROM bitacora WHERE id = :id;";
+        $statement = $pdo->prepare($sql);
+        $statement->execute([$id]);
+
+        //Eliminar el archivo del directorio de archivos generados
+        unlink('./files/bitacoras/' . $bitacora['nombre_archivo']);
+
+        // Eliminar las imágenes de evidencia del directorio de archivos subidos
+        $ruta = './uploads/';
+        for ($i = 1; $i <= $contador; $i++) {
+            if (file_exists($ruta . $bitacora['evidencia_fotografia' . $i])) {
+                unlink('./uploads/' . $bitacora['evidencia_fotografia' . $i]);
+            }
+        }
+
+        header('Location: bitacoras.php', response_code: 302);
+    } catch (Exception $e) {
+        throw $e;
+    }
 }
+
+require_once './includes/header.php';
 ?>
 <div class="main__app">
     <div class="main__header">
         <div>
             <h1 class="main__title">Bitácoras</h1>
-            <span class="main__subtitle"><?php
-                $dash_logbook_query = "SELECT * FROM bitacora";
-                $dash_logbook_query_run = mysqli_query($conn, $dash_logbook_query);
-
-                if ($bitacoras_total = mysqli_num_rows($dash_logbook_query_run)) {
-                    echo $bitacoras_total . ' bitácoras';
-                } else {
-                    echo "Sin datos";
-                }
-                ?></span>
+            <span class="main__subtitle"><?= $num_bitacoras ?> <?= $num_bitacoras > 1 || $num_bitacoras == 0 ? 'bitácoras' : 'bitácora' ?></span>
         </div>
         <div class="main__btnContainer">
             <a href="excel-bitacoras.php" class="main__btn main__btn--excel">

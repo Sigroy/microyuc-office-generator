@@ -1,12 +1,21 @@
 <?php
-require_once './config/db_connect.php';
-require_once './includes/functions.php';
-
-$sidebar_active = 'inicio';
-
-$header_title = 'Inicio';
+require './config/db_connect.php';
+require './includes/functions.php';
 
 check_login();
+
+$sidebar_active = 'inicio';
+$header_title = 'Inicio';
+
+// Consulta para recibir el número de cartas
+$sql = "SELECT COUNT(*) FROM carta";
+$statement = $pdo->query($sql);
+$num_cartas = $statement->fetchColumn();
+
+// Consulta para recibir el número de bitácoras
+$sql = "SELECT COUNT(*) AS 'num' FROM bitacora";
+$statement = $pdo->query($sql);
+$num_bitacoras = $statement->fetchColumn();
 
 require_once './includes/header.php';
 ?>
@@ -21,18 +30,7 @@ require_once './includes/header.php';
             </svg>
             Cartas generadas
         </h2>
-        <a href="cartas.php" class="card__number">
-            <?php
-            $dash_carta_query = "SELECT * FROM carta";
-            $dash_carta_query_run = mysqli_query($conn, $dash_carta_query);
-
-            if ($cartas_total = mysqli_num_rows($dash_carta_query_run)) {
-                echo $cartas_total;
-            } else {
-                echo "Sin datos";
-            }
-            ?>
-        </a>
+        <a href="cartas.php" class="card__number"><?= $num_cartas ?></a>
     </div>
     <div class="dashboard__card">
         <h2 class="card__title">
@@ -43,18 +41,7 @@ require_once './includes/header.php';
             </svg>
             Bitácoras generadas
         </h2>
-        <a href="bitacoras.php" class="card__number">
-            <?php
-            $dash_bitacora_query = "SELECT * FROM bitacora";
-            $dash_bitacora_query_run = mysqli_query($conn, $dash_bitacora_query);
-
-            if ($bitacoras_total = mysqli_num_rows($dash_bitacora_query_run)) {
-                echo $bitacoras_total;
-            } else {
-                echo "Sin datos";
-            }
-            ?>
-        </a>
+        <a href="bitacoras.php" class="card__number"><?= $num_bitacoras ?></a>
     </div>
 </div>
 </main>

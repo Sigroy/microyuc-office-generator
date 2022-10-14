@@ -2,48 +2,53 @@
 require './config/db_connect.php';
 require './includes/functions.php';
 
+check_login();
+
 $sidebar_active = 'carta';
 $header_title = 'Panel de cartas';
 
-require './includes/header.php';
+// Consulta para recibir el número de cartas
+$sql = "SELECT COUNT(*) FROM carta";
+$statement = $pdo->query($sql);
+$num_cartas = $statement->fetchColumn();
 
-check_login();
+// Consulta para generar el panel de cartas
+$sql = "SELECT id, nombre_cliente, numero_expediente, fecha_creacion, fecha_visita, monto_inicial,
+       mensualidades_vencidas, adeudo_total, nombre_archivo FROM carta ORDER BY id DESC;";
+$statement = $pdo->query($sql);
+$cartas = $statement->fetchAll();
 
-// Write query for all acreditados
-$sql = 'SELECT id, nombre_cliente, numero_expediente, fecha_creacion, fecha_visita, monto_inicial, mensualidades_vencidas, adeudo_total, nombre_archivo FROM carta ORDER BY id DESC;';
-
-// make query and & get result
-$result = mysqli_query($conn, $sql);
-
-// Fetch the resulting rows as an array
-$cartas = mysqli_fetch_all($result, MYSQLI_ASSOC);
-
-// Free result from memory
-mysqli_free_result($result);
-
+// Revisa si la string de consulta tiene un id para eliminar la carta de la base de datos y del directorio
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
-    $resultado = mysqli_query($conn, "SELECT nombre_archivo FROM carta WHERE id = '$id';");
-    $filename = $resultado->fetch_array()['nombre_archivo'] ?? '';
-    $delete = mysqli_query($conn, "DELETE FROM carta WHERE id = '$id';");
-    unlink('./files/cartas/' . $filename);
-    header('Location: cartas.php');
+    try {
+        // Consulta para recibir el nombre del archivo a eliminar
+        $sql = "SELECT nombre_archivo FROM carta WHERE id = :id";
+        $statement = $pdo->prepare($sql);
+        $statement->execute([$id]);
+        $nombre_archivo = $statement->fetchColumn();
+
+        // Sentencia para borrar la carta en la base de datos
+        $sql = "DELETE FROM carta WHERE id = :id";
+        $statement = $pdo->prepare($sql);
+        $statement->execute([$id]);
+
+        // Eliminar el archivo del directorio de archivos generados
+        unlink('./files/cartas/' . $nombre_archivo);
+        header('Location: cartas.php', response_code: 302);
+        exit;
+    } catch (Exception $e) {
+        throw $e;
+    }
 }
+
+require_once './includes/header.php';
 ?>
 <div class="main__app">
     <div class="main__header">
         <div>
             <h1 class="main__title">Cartas</h1>
-            <span class="main__subtitle"><?php
-                $dash_carta_query = "SELECT * FROM carta";
-                $dash_carta_query_run = mysqli_query($conn, $dash_carta_query);
-
-                if ($cartas_total = mysqli_num_rows($dash_carta_query_run)) {
-                    echo $cartas_total . ' cartas';
-                } else {
-                    echo "Sin datos";
-                }
-                ?></span>
+            <span class="main__subtitle"><?= $num_cartas ?> <?= $num_cartas > 1 || $num_cartas == 0 ? 'cartas' : 'carta' ?></span>
         </div>
         <div class="main__btnContainer">
             <a href="excel-cartas.php" class="main__btn main__btn--excel">
@@ -76,11 +81,11 @@ if (isset($_GET['id'])) {
             <th scope="col" class="table__head table__data--left">
                 Monto inicial
             </th>
-            <th scope="col" class="table__head table__head--width">
-                Mensualidades vencidas
-            </th>
             <th scope="col" class="table__head table__data--left">
                 Adeudo total
+            </th>
+            <th scope="col" class="table__head table__head--width">
+                Mensualidades vencidas
             </th>
             <th scope="col" class="table__head">
                 Fecha de creación
@@ -99,8 +104,8 @@ if (isset($_GET['id'])) {
                 <td class="table__data table__data--bold"><?= $carta['nombre_cliente'] ?></td>
                 <td class="table__data table__data--left"><?= $carta['numero_expediente'] ?></td>
                 <td class="table__data table__data--left"><?= '$' . number_format($carta['monto_inicial'], 2); ?></td>
-                <td class="table__data"><?= $carta['mensualidades_vencidas']; ?></td>
                 <td class="table__data table__data--left"><?= '$' . number_format($carta['adeudo_total'], 2); ?></td>
+                <td class="table__data"><?= $carta['mensualidades_vencidas']; ?></td>
                 <td class="table__data"><?= date("d-m-Y", strtotime($carta['fecha_creacion'])); ?></td>
                 <td class="table__data"><?= $carta['fecha_visita'] ? date("d-m-Y", strtotime($carta['fecha_visita'])) : ''; ?></td>
                 <?php if (file_exists('./files/cartas/' . $carta['nombre_archivo'])): ?>
