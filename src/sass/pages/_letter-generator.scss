@@ -1,0 +1,111 @@
+@use "../abstracts/index" as a;
+
+.main__btnContainer {
+  display: flex;
+  align-items: center;
+  gap: a.rem(24);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: a.rem(14);
+  //box-shadow: a.$base-shadow;
+  //border-radius: a.rem(8);
+  //padding: a.rem(18) a.rem(16);
+  //background-color: #fff;
+
+  &__fieldset {
+    display: grid;
+    border: none;
+    row-gap: a.rem(16);
+    column-gap: a.rem(18);
+
+    &--accreditedLogbook, &--aval {
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+    }
+
+    &--accredited, &--payment, &--process {
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+
+    &--verification, &--evidence {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .form__legend {
+      grid-column: 1 / -1;
+      font-size: a.rem(16);
+      font-weight: 600;
+      margin-bottom: a.rem(5);
+    }
+
+    .form__division {
+      display: flex;
+      flex-direction: column;
+
+      *:focus {
+        outline: a.$secondary solid 2px;
+      }
+
+      .form__label {
+        font-size: a.rem(13);
+        margin-bottom: a.rem(2);
+
+      }
+
+      .form__input {
+        width: 100%;
+        border: none;
+        box-shadow: a.$base-shadow;
+        border-radius: a.rem(5);
+        padding: a.rem(6) a.rem(6);
+
+        &--file {
+          padding: 0;
+          box-shadow: none;
+          border-radius: 0;
+        }
+      }
+    }
+  }
+
+  &__container--btn {
+    display: flex;
+    justify-content: end;
+    gap: a.rem(16);
+
+    .container__btn--submit {
+      text-decoration: none;
+      color: #fff;
+      padding: a.rem(10) a.rem(12);
+      border: none;
+      border-radius: a.rem(8);
+      cursor: pointer;
+      background-color: a.$primary-dark;
+
+      &:hover {
+        background-color: lighten(a.$primary-dark, 5);
+      }
+    }
+
+    .container__btn--reset {
+      text-decoration: none;
+      padding: a.rem(10) a.rem(12);
+      border: none;
+      border-radius: a.rem(8);
+      cursor: pointer;
+      background-color: a.$clear-gray;
+
+      &:hover {
+        background-color: lighten(a.$clear-gray, 5);
+      }
+
+    }
+
+    .container__btn--link:link, .container__btn--link:visited {
+      text-decoration: none;
+      color: #000000;
+    }
+  }
+}

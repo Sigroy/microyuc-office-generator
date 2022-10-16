@@ -1,0 +1,21 @@
+@use "../abstracts/index" as a;
+
+$breakpoints: (
+        "xs": 0,
+        "sm": a.em(480),
+        "md": a.em(720),
+        "lg": a.em(960),
+        "xl": a.em(1200)
+);
+
+@mixin media($size) {
+  @media (min-width: map-get($breakpoints, $size)) {
+    @content;
+  }
+}
+
+@mixin breakpoint($breakpoint: 0) {
+  @media (min-width: $breakpoint) {
+    @content;
+  }
+}

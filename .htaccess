@@ -1,0 +1,4 @@
+php_value default_charset "UTF-8"
+php_flag display_errors On
+php_flag log_errors Off
+php_value date.timezone "America/Mexico_City"
