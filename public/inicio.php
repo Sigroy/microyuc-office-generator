@@ -7,15 +7,19 @@ check_login();
 $sidebar_active = 'inicio';
 $header_title = 'Inicio';
 
-// Consulta para recibir el número de cartas
-$sql = "SELECT COUNT(*) FROM carta";
-$statement = $pdo->query($sql);
-$num_cartas = $statement->fetchColumn();
+$sql = "SELECT * FROM carta;";
+$res = mysqli_query($conn, $sql);
+$cartas = mysqli_fetch_all($res, MYSQLI_ASSOC);
 
-// Consulta para recibir el número de bitácoras
-$sql = "SELECT COUNT(*) AS 'num' FROM bitacora";
-$statement = $pdo->query($sql);
-$num_bitacoras = $statement->fetchColumn();
+//// Consulta para recibir el número de cartas
+//$sql = "SELECT COUNT(*) FROM carta";
+//$statement = $pdo->query($sql);
+//$num_cartas = $statement->fetchColumn();
+//
+//// Consulta para recibir el número de bitácoras
+//$sql = "SELECT COUNT(*) AS 'num' FROM bitacora";
+//$statement = $pdo->query($sql);
+//$num_bitacoras = $statement->fetchColumn();
 
 require_once './includes/header.php';
 ?>

@@ -1,18 +1,21 @@
 <?php
 
+namespace Microyuc\OverdueFileGenerator;
+
 class CMS
 {
-    protected $db = null;
-    protected $carta = null;
-    protected $bitacora = null;
-    protected $gestion = null;
+    protected ?Database $db = null;
+    protected ?Carta $carta = null;
+    protected ?Bitacora $bitacora = null;
+    protected ?Gestion $gestion = null;
+    protected ?Evidencia $evidencia = null;
 
     public function __construct($dsn, $username, $password)
     {
         $this->db = new Database($dsn, $username, $password);
     }
 
-    public function getCartas(): Carta
+    public function getCarta(): Carta
     {
         if ($this->carta === null) {
             $this->carta = new Carta($this->db);
@@ -34,6 +37,14 @@ class CMS
             $this->gestion = new Gestion($this->db);
         }
         return $this->gestion;
+    }
+
+    public function getEvidencia(): Evidencia
+    {
+        if ($this->evidencia === null) {
+            $this->evidencia = new Evidencia($this->db);
+        }
+        return $this->evidencia;
     }
 
 }

@@ -8,7 +8,7 @@ function html_escape(string $text): string
 
 function set_date_format_letter(): IntlDateFormatter
 {
-    return datefmt_create(
+    return new IntlDateFormatter(
         'es-MX',
         IntlDateFormatter::FULL,
         IntlDateFormatter::FULL,
@@ -20,7 +20,7 @@ function set_date_format_letter(): IntlDateFormatter
 
 function set_date_format_logbook(): IntlDateFormatter
 {
-    return datefmt_create(
+    return new IntlDateFormatter(
         'es-MX',
         IntlDateFormatter::FULL,
         IntlDateFormatter::FULL,
@@ -84,7 +84,7 @@ function handle_error($error_type, $error_message, $error_file, $error_line)
 // Manejar excepciones
 function handle_exception($e)
 {
-    error_log($e);
+    error_log($e->getMessage());
     http_response_code(500);
     echo "<h1>Lo siento, ha ocurrido un problema</h1>   
           Los propietarios del sitio han sido informados. Por favor, inténtelo de nuevo más tarde.";

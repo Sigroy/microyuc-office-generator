@@ -2,7 +2,7 @@ CREATE TABLE carta
 (
     id                      INT(11)                                 NOT NULL PRIMARY KEY AUTO_INCREMENT,
     fecha_creacion          TIMESTAMP                               NOT NULL,
-    fecha_visita            DATETIME                                     DEFAULT NULL,
+    fecha_visita            DATE                                         DEFAULT NULL,
     numero_expediente       VARCHAR(100) COLLATE utf8mb4_unicode_ci NOT NULL,
     nombre_cliente          VARCHAR(254) COLLATE utf8mb4_unicode_ci NOT NULL,
     calle                   VARCHAR(254) COLLATE utf8mb4_unicode_ci NULL DEFAULT '',
@@ -53,15 +53,25 @@ CREATE TABLE bitacora
 
 CREATE TABLE gestion
 (
-    id                   INT(11)                                 NOT NULL AUTO_INCREMENT,
-    gestion_fecha        VARCHAR(254) COLLATE utf8mb4_unicode_ci NOT NULL,
-    gestion_via          VARCHAR(254) COLLATE utf8mb4_unicode_ci NOT NULL,
-    gestion_comentarios  VARCHAR(254) COLLATE utf8mb4_unicode_ci NOT NULL,
-    evidencia_fecha      VARCHAR(254) COLLATE utf8mb4_unicode_ci NULL DEFAULT '',
-    evidencia_fotografia VARCHAR(254) COLLATE utf8mb4_unicode_ci NULL DEFAULT '',
-    bitacora_id          INT(11)                                 NOT NULL,
+    id                  INT(11)                                 NOT NULL AUTO_INCREMENT,
+    gestion_fecha       VARCHAR(254) COLLATE utf8mb4_unicode_ci NOT NULL,
+    gestion_via         VARCHAR(254) COLLATE utf8mb4_unicode_ci NOT NULL,
+    gestion_comentarios VARCHAR(254) COLLATE utf8mb4_unicode_ci NOT NULL,
+    bitacora_id         INT(11)                                 NOT NULL,
     PRIMARY KEY (id),
-    FOREIGN KEY (bitacora_id) REFERENCES bitacora (id)
+    CONSTRAINT FK_gestion_bitacora FOREIGN KEY (bitacora_id) REFERENCES bitacora (id)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci;
+
+CREATE TABLE evidencia
+(
+    id                   INT(11)                                 NOT NULL AUTO_INCREMENT,
+    evidencia_fecha      VARCHAR(254) COLLATE utf8mb4_unicode_ci NOT NULL,
+    evidencia_fotografia VARCHAR(254) COLLATE utf8mb4_unicode_ci NOT NULL,
+    gestion_id           INT(11)                                 NOT NULL,
+    PRIMARY KEY (id),
+    CONSTRAINT FK_evidencia_gestion FOREIGN KEY (gestion_id) REFERENCES gestion (id)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci;

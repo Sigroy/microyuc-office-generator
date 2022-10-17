@@ -18,5 +18,10 @@
     "ext-pdo": "*",
     "phpoffice/phpword": "^0.18.3",
     "shuchkin/simplexlsxgen": "^1.2"
+  },
+  "autoload": {
+    "psr-4": {
+      "Microyuc\\": "src/classes/"
+    }
   }
 }
