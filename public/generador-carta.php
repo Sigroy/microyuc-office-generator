@@ -57,7 +57,7 @@ $tipos_comprobacion_input = ['capital_de_trabajo', 'activo_fijo', 'adecuaciones'
 $modalidades = ['MYE', 'MYV',];
 $tipos_credito = ['GP', 'Aval', 'Hipotecario',];
 
-// Inicializar variables de hora y fecha
+// Inicializar variables de fecha y hora
 $fmt = set_date_format_letter();
 $tz_CMX = new DateTimeZone('America/Mexico_City');
 $CMX = new DateTime('now', $tz_CMX);
@@ -86,18 +86,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $carta['adeudo_total'] = $_POST['adeudo_total'];
     $carta['fecha_visita'] = $_POST['fecha_visita'];
 
+    // Añadir todos los tipos de comprobación que fueron seleccionados en el formulario y unirlos en una string
     $carta['comprobacion_tipo'] = [];
-    if (isset($_POST['capital_de_trabajo'])) $carta['comprobacion_tipo'][] = 'capital de trabajo';
-    if (isset($_POST['activo_fijo'])) $carta['comprobacion_tipo'][] = 'activo fijo';
-    if (isset($_POST['adecuaciones'])) $carta['comprobacion_tipo'][] = 'adecuaciones';
-    if (isset($_POST['insumos'])) $carta['comprobacion_tipo'][] = 'insumos';
-    if (isset($_POST['certificaciones'])) $carta['comprobacion_tipo'][] = 'certificaciones';
+    if (isset($_POST['capital_de_trabajo']) && in_array($_POST['capital_de_trabajo'], $tipos_comprobacion)) $carta['comprobacion_tipo'][] = 'capital de trabajo';
+    if (isset($_POST['activo_fijo']) && in_array($_POST['activo_fijo'], $tipos_comprobacion)) $carta['comprobacion_tipo'][] = 'activo fijo';
+    if (isset($_POST['adecuaciones']) && in_array($_POST['adecuaciones'], $tipos_comprobacion)) $carta['comprobacion_tipo'][] = 'adecuaciones';
+    if (isset($_POST['insumos']) && in_array($_POST['insumos'], $tipos_comprobacion)) $carta['comprobacion_tipo'][] = 'insumos';
+    if (isset($_POST['certificaciones']) && in_array($_POST['certificaciones'], $tipos_comprobacion)) $carta['comprobacion_tipo'][] = 'certificaciones';
     $carta['comprobacion_tipo'] = implode(", ", $carta['comprobacion_tipo']);
     if ($carta['comprobacion_tipo']) {
         $carta['comprobacion_tipo'] = ucfirst(str_lreplace(',', ' y', $carta['comprobacion_tipo']));
     }
 
-    // Validaciones de los campos obligatorios
+    // Validación de los campos obligatorios y creación de errores
     $errores['numero_expediente'] = Validar::esNumeroExpediente($carta['numero_expediente']) ? '' : 'El número de expediente debe comenzar con «IYE» y contener números y guiones.';
     $errores['nombre_cliente'] = Validar::esTexto($carta['nombre_cliente'], 1, 100) ? '' : 'El nombre debe ser entre 1 a 100 caracteres.';
     $errores['localidad'] = Validar::esTexto($carta['localidad'], 1, 100) ? '' : 'La localidad debe ser entre 1 a 100 caracteres.';
@@ -113,27 +114,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $errores['monto_inicial'] = Validar::esFloat($carta['monto_inicial']) ? '' : 'Introduzca un número válido';
     $errores['adeudo_total'] = Validar::esFloat($carta['adeudo_total']) ? '' : 'Introduzca un número válido';
 
+    // Solo se valida si contiene un valor, si no se unsetea del arreglo
     if ($carta['fecha_visita']) {
         $errores['fecha_visita'] = Validar::esFecha($carta['fecha_visita']) ? '' : 'Introduzca una fecha válida.';
     } else {
         unset($carta['fecha_visita']);
     }
 
+    // Si no hay errores en las fechas de pago inicial y final
     if (!$errores['pagos_fecha_inicial'] && !$errores['pagos_fecha_final']) {
-// Create a DateTime object using the dates recieved by post
+        // Se crean objetos de tipo DateTime para representar las fechas recibidas en el formulario
         $carta['pagos_fecha_inicial'] = new DateTime($carta['pagos_fecha_inicial']);
         $carta['pagos_fecha_final'] = new DateTime($carta['pagos_fecha_final']);
 
-// Calculate the month interval diff
+        // Se genera un objetivo de tipo DateInterval que contiene información sobre el intervalo entre las dos fechas
         $intervalo_meses = $carta['pagos_fecha_inicial']->diff($carta['pagos_fecha_final']);
 
+        // Si ejecuta la diferencia entre el intervalo no es negativa, si es negativo se generan errores
         if ($intervalo_meses->invert === 0) {
-            // Calculation so that it only gives the total in months
+            // Se calcula el número total de meses de diferencia entre las dos fechas
             $total_meses = (12 * $intervalo_meses->y) + $intervalo_meses->m + 1;
 
-// Assign the total months to variable to set the value in the template
+            // Se asigna el número total de meses a las mensualidades vencidas de la carta
             $carta['mensualidades_vencidas'] = $total_meses;
 
+            // Se formatea la variable pagos que se usa en la plantilla de word según el número de mensualidades vencidas
             if ($carta['mensualidades_vencidas'] > 1) {
                 $pagos = 'Correspondientes a los meses de ' . $fmt->format($carta['pagos_fecha_inicial']) . ' a ' . $fmt->format($carta['pagos_fecha_final']);
             } elseif ($carta['mensualidades_vencidas'] === 1) {
@@ -144,6 +149,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
+    // Si devuelve una string vacía significa que no hay errores
     $invalido = implode($errores);
 
     if (!$invalido) {
@@ -156,11 +162,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $carta['adeudo_total'] = filter_var($carta['adeudo_total'], FILTER_VALIDATE_FLOAT);
         $carta['nombre_archivo'] = $carta['numero_expediente'] . ' ' . $carta['nombre_cliente'] . ' - Carta.docx';
 
-//        Create new instance of PHPWord template processor using the required template file
+        // Se crea una nueva instancia de PHPWord para procesar la plantillas de Word.
         $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor('../word_templates/plantilla-carta.docx');
 
-
-// Set values in template with post received inputs and calculated variables
+        // Set values in template with post received inputs and calculated variables
         $templateProcessor->setValue('numero_expediente', $carta['numero_expediente']);
         $templateProcessor->setValue('nombre_cliente', $carta['nombre_cliente']);
         $templateProcessor->setValue('calle', $carta['calle']);
