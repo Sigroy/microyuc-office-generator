@@ -27,6 +27,14 @@ function set_date_format_logbook(): IntlDateFormatter
 }
 
 // Funciones de utilidad
+function is_admin($rol)
+{
+    if ($rol !== 'admin') {
+        header('Location: ' . DOC_ROOT . 'login/');
+        exit;
+    }
+}
+
 function redirect(string $location, array $parameters = [], $response_code = 302): void
 {
     $qs = $parameters ? '?' . http_build_query($parameters) : '';
