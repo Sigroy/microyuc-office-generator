@@ -2,8 +2,6 @@
 
 require '../src/bootstrap.php';
 
-//check_login();
-
 $path = mb_strtolower($_SERVER['REQUEST_URI']);
 $path = substr($path, strlen(DOC_ROOT));
 $parts = explode('/', $path);
