@@ -1,10 +1,6 @@
 <?php
 declare(strict_types=1);
 // Funciones de formato
-function html_escape(string $text): string
-{
-    return htmlspecialchars($text, ENT_QUOTES, 'UTF-8', false);
-}
 
 function set_date_format_letter(): IntlDateFormatter
 {
@@ -35,7 +31,7 @@ function redirect(string $location, array $parameters = [], $response_code = 302
 {
     $qs = $parameters ? '?' . http_build_query($parameters) : '';
     $location = $location . $qs;
-    header('Location: ' . DOC_ROOT . $location, $response_code);
+    header('Location: ' . DOC_ROOT . $location, response_code: $response_code);
     exit;
 }
 
@@ -47,20 +43,20 @@ function check_login(): void
     }
 }
 
-function create_filename(string $filename, string $upload_path): string
+function create_filename(string $filename, string $uploads): string
 {
     $basename = pathinfo($filename, PATHINFO_FILENAME);
     $extension = pathinfo($filename, PATHINFO_EXTENSION);
-    $basename = preg_replace('/[^A-zÀ-ÿ0-9]/', '-', $basename);
-    $new_filename = $basename;
+    $cleanname = preg_replace('/[^A-zÀ-ÿ0-9]/', '-', $basename);
+    $filename = $cleanname . $extension;
 
     $i = 0;
-    while (file_exists($upload_path . $new_filename . '.' . $extension)) {
+    while (file_exists($uploads . $filename)) {
         $i = $i + 1;
-        $new_filename = $basename . $i;
+        $filename = $cleanname . $i . $extension;
     }
 
-    return $new_filename . '.' . $extension;
+    return $filename;
 }
 
 function str_lreplace(string $search, string $replace, string $subject): string
@@ -84,8 +80,9 @@ function handle_error($error_type, $error_message, $error_file, $error_line)
 // Manejar excepciones
 function handle_exception($e)
 {
-    error_log($e->getMessage());
+    error_log($e);
     http_response_code(500);
+    ob_end_clean();
     echo "<h1>Lo siento, ha ocurrido un problema</h1>   
           Los propietarios del sitio han sido informados. Por favor, inténtelo de nuevo más tarde.";
 }
