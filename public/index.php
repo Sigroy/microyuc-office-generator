@@ -11,6 +11,10 @@ $id = $parts[1] ?? null;
 
 $id = filter_var($id, FILTER_VALIDATE_INT);
 
+if ($page !== 'login') {
+    is_admin($sesion->rol);
+}
+
 $php_page = APP_ROOT . '/src/pages/' . $page . '.php';
 
 if (!file_exists($php_page)) {
