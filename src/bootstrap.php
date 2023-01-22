@@ -22,6 +22,9 @@ $twig = new Twig\Environment($loader, $twig_options);
 
 $twig->addGlobal('doc_root', DOC_ROOT);
 
+$sesion = $cms->getSesion();
+$twig->addGlobal('sesion', $sesion);
+
 if (DEV === true) {
     $twig->addExtension(new Twig\Extension\DebugExtension());
 }

@@ -9,6 +9,7 @@ class CMS
     protected ?Bitacora $bitacora = null;
     protected ?Gestion $gestion = null;
     protected ?Evidencia $evidencia = null;
+    protected ?Sesion $sesion = null;
 
     public function __construct($dsn, $username, $password)
     {
@@ -45,6 +46,14 @@ class CMS
             $this->evidencia = new Evidencia($this->db);
         }
         return $this->evidencia;
+    }
+
+    public function getSesion(): Sesion
+    {
+        if ($this->sesion === null) {
+            $this->sesion = new Sesion();
+        }
+        return $this->sesion;
     }
 
 }
