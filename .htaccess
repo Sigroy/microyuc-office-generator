@@ -1,4 +1,14 @@
-php_value default_charset "UTF-8"
-php_flag display_errors On
-php_flag log_errors Off
-php_value date.timezone "America/Mexico_City"
+php_value  default_charset     "utf-8"
+php_value  max_execution_time  30
+php_value  memory_limit        20M
+php_flag   file_uploads        on
+php_value  post_max_size       5M
+php_value  upload_max_filesize 5M
+php_value  error_reporting     -1
+php_flag   display_errors      off
+php_flag   log_errors          on
+php_value  date.timezone       "America/Mexico_City"
+
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule . public/index.php [L]
