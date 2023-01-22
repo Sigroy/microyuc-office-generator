@@ -17,7 +17,8 @@
     "ext-zlib": "*",
     "ext-pdo": "*",
     "phpoffice/phpword": "^0.18.3",
-    "shuchkin/simplexlsxgen": "^1.2"
+    "shuchkin/simplexlsxgen": "^1.2",
+    "twig/twig": "^3.4"
   },
   "autoload": {
     "psr-4": {
