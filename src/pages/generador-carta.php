@@ -152,8 +152,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Si devuelve una string vacía significa que no hay errores
     $invalido = implode($errores);
 
-    if (!$invalido) {
-
+    if ($invalido) {
+        $errores['aviso'] = 'Por favor, corrija los errores del formulario';
+    } else {
+        // Crear y modificar las variables para insertar en la base de datos y en el word
         $carta['fecha_creacion'] = $fecha_actual;
         $carta['comprobacion_monto'] = filter_var($carta['comprobacion_monto'], FILTER_VALIDATE_FLOAT);
         $carta['pagos_fecha_inicial'] = $carta['pagos_fecha_inicial']->format('Y-m-d');
@@ -165,7 +167,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Se crea una nueva instancia de PHPWord para procesar la plantillas de Word.
         $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor('../word_templates/plantilla-carta.docx');
 
-        // Set values in template with post received inputs and calculated variables
+        // Se establecen los valores en la plantilla
         $templateProcessor->setValue('numero_expediente', $carta['numero_expediente']);
         $templateProcessor->setValue('nombre_cliente', $carta['nombre_cliente']);
         $templateProcessor->setValue('calle', $carta['calle']);
@@ -186,36 +188,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $templateProcessor->setValue('mensualidades_vencidas', $carta['mensualidades_vencidas']);
         $templateProcessor->setValue('adeudo_total', number_format($carta['adeudo_total'], 2));
 
-        // Encode filename so that UTF-8 characters work
+        // Se decodifica el nombre del archivo en UTF-8 para descargarlo
         $nombre_archivo_decodificado = rawurlencode($carta['nombre_archivo']);
 
-// Validation of query
-        if ($cms->getCarta()->create($carta)) {
+        $guardado = $cms->getCarta()->create($carta);
 
+        // Se valida que la creación de la carta sea correcta
+        if ($guardado === true) {
+
+            // Se crea el directorio files en caso de que no exista
             if (!is_dir('./files/')) {
                 mkdir('./files/');
             }
 
+            // Se crea el directorio cartas en caso de que no exista
             if (!is_dir('./files/cartas/')) {
                 mkdir('./files/cartas/');
             }
+            // Ruta donde se guarda el archivo de word generado
+            $ruta_guardado = './files/cartas/' . $carta['nombre_archivo'];
+            // Se guarda el archivo generado en el servidor
+            $templateProcessor->saveAs($ruta_guardado);
 
-            if (file_exists('./files/cartas/')) {
-                // Path where generated file is saved
-                $ruta_guardado = './files/cartas/' . $carta['nombre_archivo'];
-                $templateProcessor->saveAs($ruta_guardado);
-
-                if (file_exists($ruta_guardado)) {
-                    header('Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document');
-                    header('Content-Disposition: attachment; filename="' . "$nombre_archivo_decodificado" . '"');
-                    header('Content-Length: ' . filesize($ruta_guardado));
-                    ob_clean();
-                    flush();
-                    // Send generated file stored in the server to the browser
-                    readfile($ruta_guardado);
-                    exit;
-                }
+            if (file_exists($ruta_guardado)) {
+                // Se envía el archivo generado guardado en el servidor al navegador
+                header('Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+                header('Content-Disposition: attachment; filename="' . "$nombre_archivo_decodificado" . '"');
+                header('Content-Length: ' . filesize($ruta_guardado));
+                ob_clean();
+                flush();
+                readfile($ruta_guardado);
+                exit;
+            } else {
+                $errores['aviso'] = "Error al generar la carta";
             }
+        } else {
+            $errores['aviso'] = 'Error al generar la carta';
         }
     }
 }
@@ -236,6 +244,7 @@ require_once './includes/header.php';
         </a>
     </div>
     <div>
+        <div><?= $errores['aviso'] ?></div>
         <form class="form" action="generador-carta.php" method="post">
             <fieldset class="form__fieldset form__fieldset--accredited">
                 <legend class="form__legend">Información del acreditado</legend>
@@ -349,7 +358,6 @@ require_once './includes/header.php';
                            value="<?= htmlspecialchars($carta['pagos_fecha_inicial']) ?>" required>
                 </div>
                 <div class="form__division">
-                    <p class="form__error"><?= $errores['pagos_fecha_final'] ?></p>
                     <label class="form__label" for="pagos_fecha_final">Fecha final<span
                                 class="asterisk">*</span>: </label>
                     <input class="form__input" type="month" id="pagos_fecha_final"
