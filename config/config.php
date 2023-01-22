@@ -1,5 +1,5 @@
 <?php
-define('DEV', true);
+define('DEV', false);
 define('ROOT_FOLDER', 'public');
 
 //Get Heroku ClearDB connection information
