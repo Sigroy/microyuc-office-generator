@@ -81,10 +81,11 @@ CREATE TABLE usuario
 (
     id       INT(11)                                 NOT NULL AUTO_INCREMENT PRIMARY KEY,
     nombre   VARCHAR(254) COLLATE utf8mb4_unicode_ci NOT NULL,
+    rol      VARCHAR(254) COLLATE utf8mb4_unicode_ci NOT NULL,
     password VARCHAR(254) COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci;
 
 INSERT INTO usuario
-VALUES (null, 'Admin', '123456789@MY');
+VALUES (null, 'Admin', 'admin' ,'123456789@MY');
