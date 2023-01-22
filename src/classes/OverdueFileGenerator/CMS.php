@@ -10,6 +10,7 @@ class CMS
     protected ?Gestion $gestion = null;
     protected ?Evidencia $evidencia = null;
     protected ?Sesion $sesion = null;
+    protected ?Usuario $usuario = null;
 
     public function __construct($dsn, $username, $password)
     {
@@ -54,6 +55,15 @@ class CMS
             $this->sesion = new Sesion();
         }
         return $this->sesion;
+    }
+
+    public function getUsuario(): Usuario
+    {
+        if ($this->usuario === null) {
+            $this->usuario = new Usuario($this->db);
+        }
+
+        return $this->usuario;
     }
 
 }
