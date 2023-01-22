@@ -65,7 +65,7 @@ class Carta
             }
             $this->db->runSQL($sql, $carta);
             return true;
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             return false;
         }
     }
@@ -79,7 +79,7 @@ class Carta
             WHERE id = :id;";
             $this->db->runSQL($sql, [$fecha_visita, $id]);
             return true;
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             return false;
         }
     }
@@ -91,7 +91,7 @@ class Carta
             $sql = "DELETE FROM carta WHERE id = :id;";
             $this->db->runSQL($sql, [$id]);
             return true;
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             return false;
         }
     }
