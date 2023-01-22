@@ -80,7 +80,7 @@ function handle_error($error_type, $error_message, $error_file, $error_line)
 // Manejar excepciones
 function handle_exception($e)
 {
-    error_log($e);
+    error_log($e->getMessage());
     http_response_code(500);
     ob_end_clean();
     echo "<h1>Lo siento, ha ocurrido un problema</h1>   
