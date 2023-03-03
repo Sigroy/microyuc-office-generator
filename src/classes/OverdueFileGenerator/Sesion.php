@@ -4,14 +4,16 @@ namespace Microyuc\OverdueFileGenerator;
 
 class Sesion
 {
-    public $id;
-    public $rol;
+    public int $id;
+    public string $rol;
+    public string $nombre;
 
     public function __construct()
     {
         session_start();
         $this->id = $_SESSION['id'] ?? 0;
         $this->rol = $_SESSION['rol'] ?? 'usuario';
+        $this->nombre = $_SESSION['nombre'] ?? '';
     }
 
     public function crear(array $usuario): void
@@ -19,6 +21,7 @@ class Sesion
         session_regenerate_id(true);
         $_SESSION['id'] = $usuario['id'];
         $_SESSION['rol'] = $usuario['rol'];
+        $_SESSION['nombre'] = $usuario['nombre'];
     }
 
     public function actualizar(array $usuario): void
