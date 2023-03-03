@@ -1,0 +1,218 @@
+{% extends 'layout.html' %}
+{% block title %}Generador de cartas{% endblock %}
+{% block content %}
+    <main>
+        <div class="main__app">
+            <div class="main__header">
+                <h1 class="main__title">Generador de cartas</h1>
+                <a href="{{ doc_root }}cartas" class="main__btn main__btn--main">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="main__icon" fill="none" viewBox="0 0 24 24"
+                         stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                              d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                    </svg>
+                    Gestionar cartas
+                </a>
+            </div>
+            <div>
+                {% if errores.aviso %}
+                    <div>{{ errores.aviso }}</div>{% endif %}
+                <form class="form" action="{{ doc_root }}generador-carta" method="post">
+                    <fieldset class="form__fieldset form__fieldset--accredited">
+                        <legend class="form__legend">Información del acreditado</legend>
+                        <div class="form__division">
+                            {% if errores.numero_expediente %}<p
+                                    class="form__error">{{ errores.numero_expediente }}</p>{% endif %}
+                            <label class="form__label" for="numero_expediente">Número de expediente<span
+                                        class="asterisk">*</span>:</label>
+                            <input class="form__input" type="text" id="numero_expediente"
+                                   name="numero_expediente" pattern="(^IYE{1,1})([\d\-]+$)"
+                                   value="{{ carta.numero_expediente is same as('') ? 'IYE' : carta.numero_expediente }}"
+                                   required>
+                        </div>
+                        <div class="form__division">
+                            {% if errores.nombre_cliente %}<p
+                                    class="form__error">{{ errores.nombre_cliente }}</p>{% endif %}
+                            <label class="form__label" for="nombre_cliente">Nombre del cliente<span
+                                        class="asterisk">*</span>: </label>
+                            <input class="form__input" type="text" id="nombre_cliente"
+                                   name="nombre_cliente" value="{{ carta.nombre_cliente }}"
+                                   required>
+                        </div>
+                        <div class="form__division">
+                            <label class="form__label" for="calle">Calle: </label>
+                            <input class="form__input" type="text" id="calle" name="calle"
+                                   value="{{ carta.calle }}">
+                        </div>
+                        <div class="form__division">
+                            <label class="form__label" for="cruzamientos">Cruzamientos: </label>
+                            <input class="form__input" type="text" id="cruzamientos" name="cruzamientos"
+                                   value="{{ carta.cruzamientos }}">
+                        </div>
+                        <div class="form__division">
+                            <label class="form__label" for="numero_direccion">Número: </label>
+                            <input class="form__input" type="text" id="numero_direccion"
+                                   name="numero_direccion" value="{{ carta.numero_direccion }}">
+                        </div>
+                        <div class="form__division">
+                            <label class="form__label" for="colonia_fraccionamiento">Colonia/fraccionamiento: </label>
+                            <input class="form__input" type="text" id="colonia_fraccionamiento"
+                                   name="colonia_fraccionamiento"
+                                   value="{{ carta.colonia_fraccionamiento }}">
+                        </div>
+                        <div class="form__division">
+                            {% if errores.localidad %}<p class="form__error">{{ errores.localidad }}</p>{% endif %}
+                            <label class="form__label" for="localidad">Localidad<span class="asterisk">*</span>:
+                            </label>
+                            <input class="form__input" type="text" id="localidad" name="localidad"
+                                   value="{{ carta.localidad }}"
+                                   required>
+                        </div>
+                        <div class="form__division">
+                            {% if errores.municipio %}<p class="form__error">{{ errores.municipio }}</p>{% endif %}
+                            <label class="form__label" for="municipio">Municipio<span class="asterisk">*</span>:
+                            </label>
+                            <input class="form__input" type="text" id="municipio" name="municipio"
+                                   value="{{ carta.municipio }}"
+                                   required>
+                        </div>
+                        <div class="form__division">
+                            {% if errores.fecha_firma %}<p class="form__error">{{ errores.fecha_firma }}</p>{% endif %}
+                            <label class="form__label" for="fecha_firma">Fecha de firma de anexos<span class="asterisk">*</span>:
+                            </label>
+                            <input class="form__input" type="date" id="fecha_firma" name="fecha_firma"
+                                   value="{{ carta.fecha_firma ? carta.fecha_firma|date('Y-m-d'): '' }}"
+                                   required>
+                        </div>
+                    </fieldset>
+                    <fieldset class="form__fieldset">
+                        <legend class="form__legend">Documentación</legend>
+                        <div class="form__division">
+                            <label class="form__label" for="documentacion"></label>
+                            <textarea class="form__input" id="documentacion"
+                                      name="documentacion">{{ carta.documentacion }}</textarea>
+                        </div>
+                    </fieldset>
+                    <fieldset class="form__fieldset form__fieldset--verification">
+                        <legend class="form__legend">Comprobación</legend>
+                        <div class="form__division">
+                            {% if errores.comprobacion_monto %}<p
+                                    class="form__error">{{ carta.comprobacion_monto }}</p>{% endif %}
+                            <label class="form__label" for="comprobacion_monto">Monto de comprobación<span
+                                        class="asterisk">*</span>:
+                            </label>
+                            <input class="form__input" type="number" id="comprobacion_monto"
+                                   name="comprobacion_monto" step="0.01" min="0"
+                                   value="{{ carta.comprobacion_monto }}"
+                                   required>
+                        </div>
+                        <div class="form__division">
+                            {% if errores.comprobacion_tipo %}<p
+                                    class="form__error">{{ carta.comprobacion_tipo }}</p>{% endif %}
+                            <p class="form__label">Tipo de comprobación<span
+                                        class="asterisk">*</span>: </p>
+                            {% for tipo in tipos_comprobacion %}
+                                <div>
+                                    <input type="checkbox"
+                                           id="{{ tipo }}"
+                                           name="{{ tipo }}"
+                                           value="{{ tipo }}" {{ tipo|replace({'_': ' '}) in carta.comprobacion_tipo ? 'checked' : '' }}>
+                                    <label for="{{ tipo }}">{{ tipo|replace({'_': ' '})|capitalize }}</label>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </fieldset>
+                    <fieldset class="form__fieldset form__fieldset--payment">
+                        <legend class="form__legend">Pagos</legend>
+                        <div class="form__division">
+                            {% if errores.pagos_fecha %}<p class="form__error">{{ errores.pagos_fecha }}</p>{% endif %}
+                            <label class="form__label" for="pagos_fecha_inicial">Fecha inicial<span
+                                        class="asterisk">*</span>: </label>
+                            <input class="form__input" type="month" id="pagos_fecha_inicial"
+                                   name="pagos_fecha_inicial"
+                                   value="{{ carta.pagos_fecha_inicial ? carta.pagos_fecha_inicial|date('Y-m') : '' }}" required>
+                        </div>
+                        <div class="form__division">
+                            <label class="form__label" for="pagos_fecha_final">Fecha final<span
+                                        class="asterisk">*</span>: </label>
+                            <input class="form__input" type="month" id="pagos_fecha_final"
+                                   name="pagos_fecha_final"
+                                   value="{{ carta.pagos_fecha_final ? carta.pagos_fecha_final|date('Y-m') : '' }}"
+                                   required>
+                        </div>
+                        <div class="form__division">
+                            <label class="form__label" for="modalidad">Modalidad<span
+                                        class="asterisk">*</span>:
+                            </label>
+                            <select class="form__input" id="modalidad" name="modalidad" required>
+                                {% for modalidad in modalidades %}
+                                    <option value="{{ modalidad }}"
+                                            {{ carta.modalidad is same as modalidad ? 'selected' : '' }}>{{ modalidad }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form__division">
+                            <label class="form__label" for="tipo_credito">Tipo de crédito<span
+                                        class="asterisk">*</span>:
+                            </label>
+                            <select class="form__input" id="tipo_credito" name="tipo_credito" required>
+                                {% for tipo in tipos_credito %}
+                                    <option value="{{ tipo }}"
+                                            {{ carta.tipo_credito is same as tipo ? 'selected' : '' }}>{{ tipo }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form__division">
+                            <p class="form__error"><?= $errores['fecha_otorgamiento'] ?></p>
+                            <label class="form__label" for="fecha_otorgamiento">Fecha de otorgamiento del crédito<span
+                                        class="asterisk">*</span>:
+                            </label>
+                            <input class="form__input" type="date" id="fecha_otorgamiento"
+                                   name="fecha_otorgamiento"
+                                   value="{{ carta.fecha_otorgamiento ? carta.fecha_otorgamiento|date('Y-m-d') : '' }}"
+                                   required>
+                        </div>
+                        <div class="form__division">
+                            {% if errores.monto_inicial %}<p
+                                    class="form__error">{{ errores.monto_inicial }}</p>{% endif %}
+                            <label class="form__label" for="monto_inicial">Monto inicial<span class="asterisk">*</span>:
+                            </label>
+                            <input class="form__input" type="number" id="monto_inicial" name="monto_inicial" step="0.01"
+                                   min="0"
+                                   value="{{ carta.monto_inicial }}"
+                                   required>
+                        </div>
+                        <div class="form__division">
+                            {% if errores.adeudo_total %}<p
+                                    class="form__error">{{ errores.adeudo_total }}</p>{% endif %}
+                            <label class="form__label" for="adeudo_total">Adeudo total<span class="asterisk">*</span>:
+                            </label>
+                            <input class="form__input" type="number" id="adeudo_total" name="adeudo_total" step="0.01"
+                                   min="0"
+                                   value="{{ carta.adeudo_total }}"
+                                   required>
+                        </div>
+                    </fieldset>
+                    <fieldset class="form__fieldset form__fieldset--verification">
+                        <legend class="form__legend">Fecha de visita</legend>
+                        <div class="form__division">
+                            {% if errores.fecha_visita %}<p
+                                    class="form__error">{{ errores.fecha_visita }}</p>{% endif %}
+                            <label class="form__label" for="fecha_visita"></label>
+                            <input class="form__input" type="date" id="fecha_visita"
+                                   name="fecha_visita"
+                                   value="{{ carta.fecha_visita ? carta.fecha_visita|date('Y-m-d') : '' }}">
+                        </div>
+                    </fieldset>
+                    <div class="form__container--btn">
+                        <button class="container__btn--reset" type="reset">Limpiar</button>
+                        <input class="container__btn--submit" type="submit" value="Generar archivo">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+    </div>
+    </body>
+    </html>
+{% endblock %}
