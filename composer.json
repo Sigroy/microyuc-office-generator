@@ -16,9 +16,11 @@
     "ext-mbstring": "*",
     "ext-zlib": "*",
     "ext-pdo": "*",
+    "ext-zip": "*",
     "phpoffice/phpword": "^0.18.3",
     "shuchkin/simplexlsxgen": "^1.2",
-    "twig/twig": "^3.4"
+    "twig/twig": "^3.4",
+    "twig/intl-extra": "^3.5"
   },
   "autoload": {
     "psr-4": {
