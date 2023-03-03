@@ -1,5 +1,5 @@
 <?php
-define('APP_ROOT', dirname(__DIR__, 1)); // Directorio raíz
+define('APP_ROOT', dirname(__DIR__)); // Directorio raíz
 
 require APP_ROOT . '/src/functions.php';
 require APP_ROOT . '/config/config.php';
@@ -24,6 +24,8 @@ $twig->addGlobal('doc_root', DOC_ROOT);
 
 $sesion = $cms->getSesion();
 $twig->addGlobal('sesion', $sesion);
+
+$twig->addExtension(new Twig\Extra\Intl\IntlExtension());
 
 if (DEV === true) {
     $twig->addExtension(new Twig\Extension\DebugExtension());
