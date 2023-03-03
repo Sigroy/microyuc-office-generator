@@ -17,7 +17,6 @@ define('ROOT_FOLDER', 'public');
 $esta_carpeta = substr(__DIR__, strlen($_SERVER['DOCUMENT_ROOT'])); // Carpeta en la que está este archivo
 $carpeta_padre = dirname($esta_carpeta);                      // Carpeta padre de esta carpeta
 define("DOC_ROOT", $carpeta_padre . DIRECTORY_SEPARATOR . ROOT_FOLDER . DIRECTORY_SEPARATOR);             // Raíz documento
-// DOC_ROOT: \microyuc-proyecto\public\
 
 // Configuración de la base de datos
 $type = 'mysql';
