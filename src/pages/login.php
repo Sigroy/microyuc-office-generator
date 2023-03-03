@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 
+// Revisa si la sesión actual tiene de rol admin para redireccionar al usuario a la página de inicio
 if ($sesion->rol === 'admin') {
     header("Location: " . DOC_ROOT);
     exit;
@@ -29,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $invalido = implode($errores);
 
     if ($invalido) {
-        $errores['mensaje'] = 'Usuario o contraseña incorrectos. Por favor, intente de nuevo.';
+        $errores['mensaje'] = 'Credenciales incorrectas. Por favor, intente de nuevo.';
     } else {
         $usuario = $cms->getUsuario()->login($usuario, $password);
 
@@ -37,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $cms->getSesion()->crear($usuario);
             redirect('inicio/');
         } else {
-            $errores['mensaje'] = 'Usuario o contraseña incorrectos. Por favor, intente de nuevo.';
+            $errores['mensaje'] = 'Credenciales incorrectas. Por favor, intente de nuevo.';
         }
     }
 }
