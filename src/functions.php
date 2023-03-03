@@ -2,7 +2,7 @@
 declare(strict_types=1);
 // Funciones de formato
 
-function set_date_format_letter(): IntlDateFormatter
+function set_date_formatter(): IntlDateFormatter
 {
     return new IntlDateFormatter(
         'es-MX',
@@ -10,7 +10,6 @@ function set_date_format_letter(): IntlDateFormatter
         IntlDateFormatter::FULL,
         'America/Mexico_City',
         IntlDateFormatter::GREGORIAN,
-        "MMMM 'de' yyyy"
     );
 }
 
@@ -30,7 +29,7 @@ function set_date_format_logbook(): IntlDateFormatter
 function is_admin($rol)
 {
     if ($rol !== 'admin') {
-        header('Location: ' . DOC_ROOT . 'login/');
+        redirect("login");
         exit;
     }
 }
@@ -47,7 +46,7 @@ function check_login(): void
 {
     session_start();
     if (!isset($_SESSION['login'])) {
-        header('Location: index.php');
+        header('Location: login.php');
     }
 }
 
