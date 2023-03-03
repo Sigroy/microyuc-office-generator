@@ -1,5 +1,5 @@
 <?php
-define('DEV', false);
+define('DEV', true);
 define('ROOT_FOLDER', 'public');
 
 //Get Heroku ClearDB connection information
@@ -17,6 +17,7 @@ define('ROOT_FOLDER', 'public');
 $esta_carpeta = substr(__DIR__, strlen($_SERVER['DOCUMENT_ROOT'])); // Carpeta en la que está este archivo
 $carpeta_padre = dirname($esta_carpeta);                      // Carpeta padre de esta carpeta
 define("DOC_ROOT", $carpeta_padre . DIRECTORY_SEPARATOR . ROOT_FOLDER . DIRECTORY_SEPARATOR);             // Raíz documento
+// DOC_ROOT: \microyuc-proyecto\public\
 
 // Configuración de la base de datos
 $type = 'mysql';
@@ -24,14 +25,17 @@ $server = 'localhost';
 $db = 'microyuc_project';
 $port = '3307';
 $charset = 'utf8mb4';
-$username = 'sig';
-$password = '1234';
+$username = 'microyuc';
+$password = 'NYyQaw1Mdrn1[wVt';
 
 // Nombre de origen de datos
 $dsn = "$type:host=$server;dbname=$db;port=$port;charset=$charset";
 
 // Configuración para la subida de archivos
-define('UPLOADS', dirname(__DIR__, 1) . DIRECTORY_SEPARATOR . ROOT_FOLDER . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR);
+define('UPLOADS', dirname(__DIR__) . DIRECTORY_SEPARATOR . ROOT_FOLDER . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR);
+define('TIPOS_COMPROBACION', ['capital_de_trabajo', 'activo_fijo', 'adecuaciones', 'insumos', 'certificaciones',]);
+define('MODALIDADES', ['MYE', 'MYV',]);
+define('TIPOS_CREDITO', ['GP', 'Aval', 'Hipotecario',]);
 define('MEDIA_TYPES', ['image/jpeg', 'image/png', 'image/gif', 'image/bmp', 'image/tiff', 'image/webp',]);
 define('FILE_EXTENSIONS', ['jpeg', 'jpg', 'jpe', 'jif', 'jfif', 'png', 'gif', 'bmp', 'tif', 'tiff', 'webp',]);
 define('MAX_SIZE', '5242880');
