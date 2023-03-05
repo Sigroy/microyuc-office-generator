@@ -13,10 +13,11 @@ if (!$id) {
 
     if ($eliminada === false || $eliminada === 0) {
         redirect('cartas', ['error' => 'Hubo un error al eliminar la carta']);
+        exit;
     }
 
     // Eliminar el archivo del directorio de archivos generados
     unlink('./files/cartas/' . $nombre_archivo);
     redirect('cartas/', ['exito' => 'Se ha eliminado la carta correctamente']);
 }
-
+exit;
