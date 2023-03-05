@@ -85,12 +85,24 @@ class Carta
     }
 
     // Eliminar carta existente
-    public function delete(int $id): bool
+    public function delete(int $id): int|bool
     {
         try {
-            $sql = "DELETE FROM carta WHERE id = :id;";
-            $this->db->runSQL($sql, [$id]);
-            return true;
+            $sql = "DELETE FROM carta
+                    WHERE id = :id;";
+            return $this->db->runSQL($sql, [$id])->rowCount();
+        } catch (\PDOException $e) {
+            return false;
+        }
+    }
+
+    public function getFileNameById(int $id): string|false
+    {
+        try {
+            $sql = "SELECT nombre_archivo
+                    FROM carta
+                    WHERE id = :id;";
+            return $this->db->runSQL($sql, [$id])->fetchColumn();
         } catch (\PDOException $e) {
             return false;
         }
