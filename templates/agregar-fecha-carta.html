@@ -1,0 +1,39 @@
+{% extends 'layout.html' %}
+{% block title %}Agregar fecha de visita{% endblock %}
+{% block content %}
+    <main>
+        <div class="main__app">
+            <div class="main__header">
+                <h1 class="main__title">Agregar fecha de visita a {{ cliente.nombre_cliente }}</h1>
+                <a href="{{ doc_root }}cartas" class="main__btn main__btn--main">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="main__icon" fill="none" viewBox="0 0 24 24"
+                         stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                              d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                    </svg>
+                    Gestionar cartas
+                </a>
+            </div>
+            <div>
+                <form class="form" action="{{ doc_root }}agregar-fecha-carta/{{ cliente.id }}" method="post">
+                    <fieldset class="form__fieldset form__fieldset--verification">
+                        <legend class="form__legend">Fecha de visita<span class="asterisk">*</span></legend>
+                        <div class="form__division">
+                            <label class="form__label" for="fecha_visita"></label>
+                            <input class="form__input" type="date" id="fecha_visita"
+                                   name="fecha_visita"
+                                   value="{{ fecha_visita }}" required>
+                            <p class="form__error">{{ error }}</p>
+                        </div>
+                    </fieldset>
+                    <div class="form__container--btn">
+                        <input class="container__btn--submit" type="submit" value="Agregar fecha">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+    </div>
+    </body>
+    </html>
+{% endblock %}
