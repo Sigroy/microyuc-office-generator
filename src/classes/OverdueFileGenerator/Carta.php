@@ -71,14 +71,13 @@ class Carta
     }
 
     // Actualizar fecha de visita
-    public function updateFechaVisita(string $fecha_visita, int $id): bool
+    public function updateFechaVisita(string $fecha_visita, int $id): int|false
     {
         try {
             $sql = "UPDATE carta
             SET fecha_visita = :fecha_visita
             WHERE id = :id;";
-            $this->db->runSQL($sql, [$fecha_visita, $id]);
-            return true;
+            return $this->db->runSQL($sql, [$fecha_visita, $id])->rowCount();
         } catch (\PDOException $e) {
             return false;
         }
@@ -103,6 +102,18 @@ class Carta
                     FROM carta
                     WHERE id = :id;";
             return $this->db->runSQL($sql, [$id])->fetchColumn();
+        } catch (\PDOException $e) {
+            return false;
+        }
+    }
+
+    public function getClientById(int $id): array|false
+    {
+        try {
+            $sql = "SELECT id, nombre_cliente, fecha_visita
+                    FROM carta
+                    WHERE id = :id;";
+            return $this->db->runSQL($sql, [$id])->fetch();
         } catch (\PDOException $e) {
             return false;
         }
