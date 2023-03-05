@@ -45,9 +45,6 @@ $errores = [
     'fecha_visita' => '',
 ];
 
-$modalidades = ['MYE', 'MYV',];
-$tipos_credito = ['GP', 'Aval', 'Hipotecario',];
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Inicializar variables de fecha y hora
@@ -104,8 +101,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $errores['comprobacion_tipo'] = $carta['comprobacion_tipo'] ? '' : 'Seleccione al menos una opción.';
     $errores['pagos_fecha'] = Validar::esFecha($carta['pagos_fecha_inicial']) ? '' : 'Introduzca intervalos de fechas válidas.';
     $errores['pagos_fecha'] = Validar::esFecha($carta['pagos_fecha_final']) ? '' : 'Introduzca intervalos de fechas válidas.';
-    $errores['modalidad'] = in_array($carta['modalidad'], $modalidades) ? '' : 'Seleccione una opción válida.';
-    $errores['tipo_credito'] = in_array($carta['tipo_credito'], $tipos_credito) ? '' : 'Seleccione una opción válida.';
+    $errores['modalidad'] = in_array($carta['modalidad'], MODALIDADES) ? '' : 'Seleccione una opción válida.';
+    $errores['tipo_credito'] = in_array($carta['tipo_credito'], TIPOS_CREDITO) ? '' : 'Seleccione una opción válida.';
     $errores['fecha_otorgamiento'] = Validar::esFecha($carta['fecha_otorgamiento']) ? '' : 'Introduzca una fecha válida.';
     $errores['monto_inicial'] = Validar::esFloat($carta['monto_inicial']) ? '' : 'Introduzca un número válido';
     $errores['adeudo_total'] = Validar::esFloat($carta['adeudo_total']) ? '' : 'Introduzca un número válido';
@@ -120,8 +117,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Si no hay errores en las fechas de pago inicial y final
     if (!$errores['pagos_fecha']) {
         // Se crean objetos de tipo DateTime para representar las fechas recibidas en el formulario
-        $carta['pagos_fecha_inicial'] = new DateTime($carta['pagos_fecha_inicial']);
-        $carta['pagos_fecha_final'] = new DateTime($carta['pagos_fecha_final']);
+        $carta['pagos_fecha_inicial'] = new DateTime($carta['pagos_fecha_inicial'], $time_zone_CMX);
+        $carta['pagos_fecha_final'] = new DateTime($carta['pagos_fecha_final'], $time_zone_CMX);
 
         // Se genera un objetio de tipo DateInterval que contiene información sobre el intervalo de diferencia entre las dos fechas
         $intervalo_meses = $carta['pagos_fecha_inicial']->diff($carta['pagos_fecha_final']);
@@ -232,8 +229,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $data['sidebar'] = 'carta';
 $data['carta'] = $carta;
 $data['tipos_comprobacion'] = TIPOS_COMPROBACION;
-$data['modalidades'] = $modalidades;
-$data['tipos_credito'] = $tipos_credito;
+$data['modalidades'] = MODALIDADES;
+$data['tipos_credito'] = TIPOS_CREDITO;
 $data['errores'] = $errores;
 
 echo $twig->render('generador-carta.html', $data);
