@@ -10,6 +10,8 @@ foreach ($cartas as &$carta) {
 
 $data['sidebar'] = 'carta';
 $data['num_cartas'] = $cms->getCarta()->count();
+$data['exito'] = $_GET['exito'] ?? '';
+$data['error'] = $_GET['error'] ?? '';
 $data['cartas'] = $cartas;
 
 echo $twig->render('cartas.html', $data);
