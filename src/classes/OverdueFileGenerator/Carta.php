@@ -21,7 +21,7 @@ class Carta
     }
 
     // Obtener todas las cartas
-    public function getAll(): array
+    public function getAll(): array|false
     {
         $sql = "SELECT *
         FROM carta;";
