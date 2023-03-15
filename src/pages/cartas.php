@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-$cartas = $cms->getCarta()->getAll();
+$cartas = $cms->getCarta()->getAll(true);
 
 // Revisar si los archivos existen en el servidor para poder mostrar el enlace de descarga en el HTML
 foreach ($cartas as &$carta) {
