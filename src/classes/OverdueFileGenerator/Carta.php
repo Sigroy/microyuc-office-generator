@@ -21,15 +21,16 @@ class Carta
     }
 
     // Obtener todas las cartas
-    public function getAll(): array|false
+    public function getAll(bool $orderByIdDesc = false): array|false
     {
         $sql = "SELECT *
-        FROM carta;";
+        FROM carta";
+        $sql .= $orderByIdDesc ? " ORDER BY id DESC;" : ';';
         return $this->db->runSQL($sql)->fetchAll();
     }
 
     // Obtener el número de cartas
-    public function count(): int
+    public function count(): int|false
     {
         $sql = "SELECT COUNT(id)
         FROM carta;";

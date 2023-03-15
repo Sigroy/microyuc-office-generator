@@ -11,7 +11,14 @@ class Bitacora
         $this->db = $db;
     }
 
-    public function count(): int
+    public function getAll(bool $orderByIdDesc = false): array|false {
+        $sql = "SELECT *
+        FROM bitacora";
+        $sql .= $orderByIdDesc ? " ORDER BY id DESC;" : ";";
+        return $this->db->runSQL($sql)->fetchAll();
+    }
+
+    public function count(): int|false
     {
         $sql = "SELECT COUNT(id)
                 FROM bitacora;";
