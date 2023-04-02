@@ -33,6 +33,7 @@ $dsn = "$type:host=$server;dbname=$db;port=$port;charset=$charset";
 // Configuración para la subida de archivos
 define('UPLOADS', dirname(__DIR__) . DIRECTORY_SEPARATOR . ROOT_FOLDER . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR);
 define('TIPOS_COMPROBACION', ['capital_de_trabajo', 'activo_fijo', 'adecuaciones', 'insumos', 'certificaciones',]);
+define('VIAS_GESTION', ['Correo electrónico', 'Llamada telefónica', 'Visita', 'Pago', 'Reestructura', 'Otro',]);
 define('MODALIDADES', ['MYE', 'MYV',]);
 define('TIPOS_CREDITO', ['GP', 'Aval', 'Hipotecario',]);
 define('MEDIA_TYPES', ['image/jpeg', 'image/png', 'image/gif', 'image/bmp', 'image/tiff', 'image/webp',]);
