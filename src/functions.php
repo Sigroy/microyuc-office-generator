@@ -13,18 +13,6 @@ function set_date_formatter(): IntlDateFormatter
     );
 }
 
-function set_date_format_logbook(): IntlDateFormatter
-{
-    return new IntlDateFormatter(
-        'es-MX',
-        IntlDateFormatter::FULL,
-        IntlDateFormatter::FULL,
-        'America/Mexico_City',
-        IntlDateFormatter::GREGORIAN,
-        "EEEE d 'de' MMMM 'de' yyyy"
-    );
-}
-
 // Funciones de utilidad
 function is_admin($rol)
 {
