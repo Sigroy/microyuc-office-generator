@@ -157,12 +157,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $templateProcessor->setValue('aval_email', $bitacora['aval_email']);
         $templateProcessor->setValue('aval_direccion', $bitacora['aval_direccion']);
         $templateProcessor->cloneRowAndSetValues('gestion_fecha', $valores_de_gestion);
+        $templateProcessor->cloneBlock('evidencia');
         if ($movido) {
-            $templateProcessor->cloneBlock('evidencia');
             $templateProcessor->setValue('evidencia_fecha', $evidencia['evidencia_fecha_texto']);
             $templateProcessor->setImageValue('evidencia_fotografia', array('path' => UPLOADS . $evidencia['evidencia_fotografia'], 'width' => 720, 'height' => 480));
         } else {
-            $templateProcessor->deleteBlock('evidencia');
+            $templateProcessor->setValue('evidencia_fecha', '');
+            $templateProcessor->setValue('evidencia_fotografia', '');
         }
 
         // Crear una variable para el nombre del archivo
