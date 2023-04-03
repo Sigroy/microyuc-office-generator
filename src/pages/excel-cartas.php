@@ -17,7 +17,7 @@ $excel = [
 $cartas = $cms->getCarta()->getAll();
 
 if ($cartas === false) {
-    redirect('cartas', ['error' => 'Hubo un error al generar el archivo de Excel']);
+    redirect('cartas/', ['error' => 'Hubo un error al generar el archivo de Excel']);
     exit;
 }
 
