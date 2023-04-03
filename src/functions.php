@@ -43,12 +43,12 @@ function create_filename(string $filename, string $uploads): string
     $basename = pathinfo($filename, PATHINFO_FILENAME);
     $extension = pathinfo($filename, PATHINFO_EXTENSION);
     $cleanname = preg_replace('/[^A-zÀ-ÿ0-9]/', '-', $basename);
-    $filename = $cleanname . $extension;
+    $filename = $cleanname . '.' . $extension;
 
     $i = 0;
     while (file_exists($uploads . $filename)) {
         $i = $i + 1;
-        $filename = $cleanname . $i . $extension;
+        $filename = $cleanname . $i . '.'. $extension;
     }
 
     return $filename;
