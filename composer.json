@@ -1,12 +1,12 @@
 {
-  "name": "vendor_name/microyuc-proyecto",
-  "description": "description",
+  "name": "microyuc/overdue_file_generator",
+  "description": "Web application for microyuc that automates creating overdue credit payment letters and reports in Microsoft Word and exports the database to Microsoft Excel.",
   "minimum-stability": "stable",
   "license": "proprietary",
   "authors": [
     {
-      "name": "sigfr",
-      "email": "email@example.com"
+      "name": "Sigfredo Olmedo",
+      "email": "sigfredoolmedo6c17@gmail.com"
     }
   ],
   "require": {
