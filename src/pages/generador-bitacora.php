@@ -215,6 +215,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 $data['sidebar'] = 'bitacora';
 $data['bitacora'] = $bitacora;
+$data['gestion'] = $gestion;
+$data['evidencia'] = $evidencia;
 $data['tipos_garantia'] = TIPOS_CREDITO;
 $data['vias_gestion'] = VIAS_GESTION;
 $data['errores'] = $errores;

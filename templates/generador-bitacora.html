@@ -15,6 +15,8 @@
                 </a>
             </div>
             <div>
+                {% if errores.aviso %}
+                    <div>{{ errores.aviso }}</div>{% endif %}
                 <form class="form" action="{{ doc_root }}generador-bitacora" method="post"
                       enctype="multipart/form-data">
                     <fieldset class="form__fieldset form__fieldset--accreditedLogbook">
@@ -152,7 +154,7 @@
                                         class="asterisk">*</span>:
                             </label>
                             <input class="form__input" type="date" id="gestion_fecha" name="gestion_fecha"
-                                   value="{{ bitacora.gestion_fecha }}"
+                                   value="{{ gestion.gestion_fecha ? gestion.gestion_fecha|date('Y-m-d') : '' }}"
                                    required>
                             {% if errores.gestion_fecha %}<p
                                     class="form__error">{{ errores.gestion_fecha }}</p>{% endif %}
@@ -164,7 +166,7 @@
                             <select class="form__input" id="gestion_via" name="gestion_via" required>
                                 {% for via in vias_gestion %}
                                     <option value="{{ via }}"
-                                            {{ bitacora.gestion_via is same as via ? 'selected' : '' }}
+                                            {{ gestion.gestion_via is same as via ? 'selected' : '' }}
                                     >{{ via }}</option>
                                 {% endfor %}
                             </select>
@@ -176,7 +178,7 @@
                             </label>
                             <input class="form__input" type="text" id="gestion_comentarios"
                                    name="gestion_comentarios"
-                                   value="{{ bitacora.gestion_comentarios }}">
+                                   value="{{ gestion.gestion_comentarios }}">
                         </div>
                     </fieldset>
                     <fieldset class="form__fieldset form__fieldset--evidence">
@@ -185,14 +187,17 @@
                             <label class="form__label" for="evidencia_fecha">Fecha:
                             </label>
                             <input class="form__input" type="date" id="evidencia_fecha" name="evidencia_fecha"
-                                    {{ bitacora.evidencia_fecha is not empty ? 'value=' . bitacora.evidencia_fecha|format('Y-m-d') : '' }}
-                            >
+                                   value="{{ evidencia.evidencia_fecha ? evidencia.evidencia_fecha|format('Y-m-d') : '' }}">
+                            {% if errores.evidencia_fecha %}<p
+                                    class="form__error">{{ errores.evidencia_fecha }}</p>{% endif %}
                         </div>
                         <div class="form__division">
                             <label class="form__label" for="evidencia_fotografia">Fotografía:
                             </label>
                             <input class="form__input form__input--file" type="file" id="evidencia_fotografia"
                                    name="evidencia_fotografia">
+                            {% if errores.evidencia_fotografia %}<p
+                                    class="form__error">{{ errores.evidencia_fotografia }}</p>{% endif %}
                         </div>
                     </fieldset>
                     <div class="form__container--btn">
