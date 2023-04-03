@@ -12,7 +12,7 @@ if (!$id) {
     $eliminada = $cms->getCarta()->delete($id);
 
     if ($eliminada === false || $eliminada === 0) {
-        redirect('cartas', ['error' => 'Hubo un error al eliminar la carta']);
+        redirect('cartas/', ['error' => 'Hubo un error al eliminar la carta']);
         exit;
     }
 

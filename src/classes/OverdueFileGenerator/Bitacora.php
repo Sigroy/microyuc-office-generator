@@ -11,12 +11,36 @@ class Bitacora
         $this->db = $db;
     }
 
+    public function getById(int|string $id): array|false
+    {
+        try {
+            $sql = "SELECT *
+                    FROM bitacora
+                    WHERE id = :id;";
+            return $this->db->runSQL($sql, [$id])->fetch();
+        } catch (\PDOException $e) {
+            return false;
+        }
+    }
+
     public function getAll(bool $orderByIdDesc = false): array|false
     {
         $sql = "SELECT *
         FROM bitacora";
         $sql .= $orderByIdDesc ? " ORDER BY id DESC;" : ";";
         return $this->db->runSQL($sql)->fetchAll();
+    }
+
+    public function getFileNameById(int $id): string|bool
+    {
+        try {
+            $sql = "SELECT nombre_archivo
+                    FROM bitacora
+                    WHERE id = :id";
+            return $this->db->runSQL($sql, [$id])->fetchColumn();
+        } catch (\PDOException $e) {
+            return false;
+        }
     }
 
     public function count(): int|false
@@ -59,6 +83,17 @@ class Bitacora
             } else {
                 throw $e;
             }
+        }
+    }
+
+    public function delete(string|int $id): int|bool
+    {
+        try {
+            $sql = "DELETE FROM bitacora
+                    WHERE id = :id;";
+            return $this->db->runSQL($sql, [$id])->rowCount();
+        } catch (\PDOException $e) {
+            return false;
         }
     }
 }

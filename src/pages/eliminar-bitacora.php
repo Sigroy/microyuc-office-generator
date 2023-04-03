@@ -1,39 +1,22 @@
 <?php
-if ($id) {
-    try {
-        // Consulta para recibir los datos de la bitácora a eliminar eliminar
-        $sql = "SELECT * FROM bitacora WHERE id = :id;";
-        $statement = $pdo->prepare($sql);
-        $statement->execute([$id]);
-        $bitacora = $statement->fetch();
+declare(strict_types=1);
 
-        // Devuelve todas las claves del arreglo de la bitácora para saber cuántas gestiones tiene la bitácora
-        $claves = array_keys($bitacora);
-        $contador = 0;
-        foreach ($claves as $clave) {
-            if (str_contains($clave, "evidencia_fotografia")) {
-                $contador++;
-            }
-        }
+if (!$id) {
+    redirect('bitacoras');
+} else {
 
-        // Sentencia para borrar la bitácora en la base de datos
-        $sql = "DELETE FROM bitacora WHERE id = :id;";
-        $statement = $pdo->prepare($sql);
-        $statement->execute([$id]);
+    // Consulta para recibir el nombre del archivo a eliminar
+    $nombre_archivo = $cms->getBitacora()->getFileNameById($id);
 
-        //Eliminar el archivo del directorio de archivos generados
-        unlink('./files/bitacoras/' . $bitacora['nombre_archivo']);
+    // Sentencia para borrar la carta en la base de datos
+    $eliminada = $cms->getBitacora()->delete($id);
 
-        // Eliminar las imágenes de evidencia del directorio de archivos subidos
-        $ruta = './uploads/';
-        for ($i = 1; $i <= $contador; $i++) {
-            if (file_exists($ruta . $bitacora['evidencia_fotografia' . $i])) {
-                unlink('./uploads/' . $bitacora['evidencia_fotografia' . $i]);
-            }
-        }
-
-        header('Location: bitacoras.php', response_code: 302);
-    } catch (Exception $e) {
-        throw $e;
+    if ($eliminada === false || $eliminada === 0) {
+        redirect('bitacoras/', ['error' => 'Hubo un error al eliminar la bitácora']);
+        exit;
     }
+
+    unlink('./files/bitacoras/' . $nombre_archivo);
+    redirect('bitacoras/', ['exito' => 'Se ha eliminada la bitácora correctamente']);
 }
+exit;
