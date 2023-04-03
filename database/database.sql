@@ -59,7 +59,7 @@ CREATE TABLE gestion
     gestion_comentarios VARCHAR(254) COLLATE utf8mb4_unicode_ci NOT NULL,
     bitacora_id         INT(11)                                 NOT NULL,
     PRIMARY KEY (id),
-    CONSTRAINT FK_gestion_bitacora FOREIGN KEY (bitacora_id) REFERENCES bitacora (id)
+    CONSTRAINT FK_gestion_bitacora FOREIGN KEY (bitacora_id) REFERENCES bitacora (id) ON DELETE CASCADE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci;
@@ -71,7 +71,7 @@ CREATE TABLE evidencia
     evidencia_fotografia VARCHAR(254) COLLATE utf8mb4_unicode_ci NOT NULL,
     gestion_id           INT(11)                                 NOT NULL,
     PRIMARY KEY (id),
-    CONSTRAINT FK_evidencia_gestion FOREIGN KEY (gestion_id) REFERENCES gestion (id)
+    CONSTRAINT FK_evidencia_gestion FOREIGN KEY (gestion_id) REFERENCES gestion (id) ON DELETE CASCADE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci;
