@@ -1,0 +1,91 @@
+{% extends 'layout.html' %}
+{% block title %}Agregar gestión{% endblock %}
+{% block content %}
+    <main>
+        <div class="main__app">
+            <div class="main__header">
+                <h1 class="main__title">Agregar gestión a {{ bitacora.acreditado_nombre }}</h1>
+                <a href="{{ doc_root }}bitacoras" class="main__btn main__btn--main">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="main__icon" fill="none" viewBox="0 0 24 24"
+                         stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                              d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                    </svg>
+                    Gestionar bitácoras
+                </a>
+            </div>
+            <div>
+                {% if errores.aviso %}
+                    <div>{{ errores.aviso }}</div>{% endif %}
+                <form class="form" action="{{ doc_root }}agregar-gestion/{{ bitacora.id }}" method="post"
+                      enctype="multipart/form-data">
+                    <fieldset class="form__fieldset form__fieldset--process">
+                        <legend class="form__legend">Gestión</legend>
+                        <div class="form__division">
+                            <label class="form__label" for="gestion_fecha">Fecha<span
+                                        class="asterisk">*</span>:
+                            </label>
+                            <input class="form__input" type="date" id="gestion_fecha"
+                                   name="gestion_fecha"
+                                   value="{{ gestion.gestion_fecha ? gestion.gestion_fecha|date('Y-m-d') : '' }}"
+                                   required>
+                            {% if errores.gestion_fecha %}<p
+                                    class="form__error">{{ errores.gestion_fecha }}</p>{% endif %}
+                        </div>
+                        <div class="form__division">
+                            <label class="form__label" for="gestion_via">Vía<span
+                                        class="asterisk">*</span>:
+                            </label>
+                            <select class="form__input" id="gestion_via"
+                                    name="gestion_via" required>
+                                {% for via in vias_gestion %}
+                                    <option value="{{ via }}"
+                                            {{ gestion.gestion_via is same as via ? 'selected' : '' }}
+                                    >{{ via }}</option>
+                                {% endfor %}
+                            </select>
+                            {% if errores.gestion_via %}<p
+                                    class="form__error">{{ errores.gestion_via }}</p>{% endif %}
+                        </div>
+                        <div class="form__division">
+                            <label class="form__label" for="gestion_comentarios">Comentarios/Resultados:
+                            </label>
+                            <input class="form__input" type="text"
+                                   id="gestion_comentarios"
+                                   name="gestion_comentarios"
+                                   value="{{ gestion.gestion_comentarios }}">
+                        </div>
+                    </fieldset>
+                    <fieldset class="form__fieldset form__fieldset--evidence">
+                        <legend class="form__legend">Evidencias</legend>
+                        <div class="form__division">
+                            <label class="form__label" for="evidencia_fecha">Fecha:
+                            </label>
+                            <input class="form__input" type="date" id="evidencia_fecha"
+                                   name="evidencia_fecha"
+                                    {{ evidencia.evidencia_fecha ? evidencia.evidencia_fecha|date('Y-m-d') : '' }}>
+                            {% if errores.evidencia_fecha %}<p
+                                    class="form__error">{{ errores.evidencia_fecha }}</p>{% endif %}
+                        </div>
+                        <div class="form__division">
+                            <label class="form__label" for="evidencia_fotografia">Fotografía:
+                            </label>
+                            <input class="form__input form__input--file" type="file"
+                                   id="evidencia_fotografia"
+                                   name="evidencia_fotografia">
+                            {% if errores.evidencia_fotografia %}<p
+                                    class="form__error">{{ errores.evidencia_fotografia }}</p>{% endif %}
+                        </div>
+                    </fieldset>
+                    <div class="form__container--btn">
+                        <button class="container__btn--reset" type="reset">Limpiar</button>
+                        <input class="container__btn--submit" type="submit" value="Generar archivo">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+    </div>
+    </body>
+    </html>
+{% endblock %}
