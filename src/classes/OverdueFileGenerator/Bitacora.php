@@ -31,6 +31,43 @@ class Bitacora
         return $this->db->runSQL($sql)->fetchAll();
     }
 
+    public function getAllForExcel(): array|false
+    {
+        try {
+            $sql = "SELECT b.id,
+                    b.fecha_creacion,
+                    b.acreditado_nombre,
+                    b.acreditado_folio,
+                    b.acreditado_municipio,
+                    b.acreditado_localidad,
+                    b.tipo_garantia,
+                    b.acreditado_garantia,
+                    b.acreditado_telefono,
+                    b.acreditado_email,
+                    b.aval_nombre,
+                    g.gestion_fecha,
+                    g.gestion_via,
+                    g.gestion_comentarios,
+                    e.evidencia_fecha,
+                    e.evidencia_fotografia
+                    FROM bitacora b
+                    LEFT JOIN (
+                        SELECT *
+                        FROM gestion
+                        ORDER BY id
+                    ) g ON b.id = g.bitacora_id
+                    LEFT JOIN (
+                        SELECT *
+                        FROM evidencia
+                        ORDER BY id
+                    ) e ON g.id = e.gestion_id
+                    ORDER BY b.id, g.id, e.id;";
+            return $this->db->runSQL($sql)->fetchAll();
+        } catch (\PDOException) {
+            return false;
+        }
+    }
+
     public function getFileNameById(int $id): string|bool
     {
         try {
