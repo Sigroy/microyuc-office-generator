@@ -17,7 +17,7 @@ class Evidencia
             $sql = "SELECT evidencia_fecha, evidencia_fotografia
                     FROM evidencia
                     WHERE gestion_id = :id;";
-            return $this->db->runSQL($sql, [$id])->fetchAll();
+            return $this->db->runSQL($sql, [$id])->fetch();
         } catch (\PDOException) {
             return false;
         }

@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 use Microyuc\Validar\Validar;
 
-// TODO: Check warning errors when the form is cleared and another gestion wants to be added.
-
 if (!$id) {
     redirect('bitacoras');
     exit;
@@ -68,10 +66,10 @@ if (!$id) {
 
                 if (!$errores['evidencia_fotografia']) {
                     $fotografia_nombre_archivo = create_filename($_FILES['evidencia_fotografia']['name'], UPLOADS);
-                    if (!file_exists('./uploads/')) {
-                        mkdir('./uploads/');
+                    if (!file_exists(UPLOADS)) {
+                        mkdir(UPLOADS);
                     }
-                    if (file_exists('./uploads/')) {
+                    if (file_exists(UPLOADS)) {
                         $destino = UPLOADS . $fotografia_nombre_archivo;
                         $movido = move_uploaded_file($_FILES['evidencia_fotografia']['tmp_name'], $destino);
                     }
@@ -95,31 +93,31 @@ if (!$id) {
             $gestiones = $cms->getGestion()->getByBitacoraId($id);
 
             $valores_de_evidencia = [];
+            $valores_de_gestion = [];
             foreach ($gestiones as $registro_gestion) {
                 if ($evidencias = $cms->getEvidencia()->getByGestionId($registro_gestion['id'])) {
-                    foreach ($evidencias as $registro_evidencia) {
-                        $registro_evidencia['evidencia_fecha_texto'] = "Se visitó el negocio el " . $date_formatter->format(new DateTime($registro_evidencia['evidencia_fecha'], $time_zone_CMX)) . ".</w:t><w:br/><w:t>Fachada del negocio.";
-                        $valores_de_evidencia[] = $registro_evidencia;
-                    }
+                    $evidencias['evidencia_fecha_texto'] = "Se visitó el negocio el " . $date_formatter->format(new DateTime($evidencias['evidencia_fecha'], $time_zone_CMX)) . ".</w:t><w:br/><w:t>Fachada del negocio.";
+                    $valores_de_evidencia[] = $evidencias;
+
                 }
+
+                unset($registro_gestion['id']);
+                $registro_gestion['gestion_fecha'] = date("d-m-Y", strtotime($registro_gestion['gestion_fecha']));
+                $valores_de_gestion[] = $registro_gestion;
             }
+
+            $valores_de_gestion[] =
+                ['gestion_fecha' => date("d-m-Y", strtotime($gestion['gestion_fecha'])), 'gestion_via' => $gestion['gestion_via'], 'gestion_comentarios' => $gestion['gestion_comentarios']];
 
             if ($movido) {
                 $valores_de_evidencia[] = $evidencia;
             }
 
+            // Contador para los bloques de la evidencia que se clonan
+            $contador_evidencias = 0;
+
             // Se crea una nueva instancia de PHPWord para procesar la plantillas de Word.
             $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor('../word-templates/plantilla-bitacora.docx');
-
-            // Se crea un arreglo para establecer en la tabla de la plantilla varios valores para la gestión
-            $valores_de_gestion = [];
-            foreach ($gestiones as $registro_gestion) {
-                unset($registro_gestion['id']);
-                $registro_gestion['gestion_fecha'] = date("d-m-Y", strtotime($registro_gestion['gestion_fecha']));
-                $valores_de_gestion[] = $registro_gestion;
-            }
-            $valores_de_gestion[] =
-                ['gestion_fecha' => date("d-m-Y", strtotime($gestion['gestion_fecha'])), 'gestion_via' => $gestion['gestion_via'], 'gestion_comentarios' => $gestion['gestion_comentarios']];
 
             $templateProcessor->setValue('acreditado_nombre', $bitacora['acreditado_nombre']);
             $templateProcessor->setValue('acreditado_folio', $bitacora['acreditado_folio']);
@@ -136,19 +134,16 @@ if (!$id) {
             $templateProcessor->setValue('aval_email', $bitacora['aval_email']);
             $templateProcessor->setValue('aval_direccion', $bitacora['aval_direccion']);
             $templateProcessor->cloneRowAndSetValues('gestion_fecha', $valores_de_gestion);
-            $templateProcessor->cloneBlock('evidencia', count($valores_de_evidencia));
+            $templateProcessor->cloneBlock('evidencia', count($valores_de_evidencia), true, true);
             foreach ($valores_de_evidencia as $valor) {
-                $templateProcessor->setValue('evidencia_fecha', $valor['evidencia_fecha_texto']);
+                $contador_evidencias++;
+                $templateProcessor->setValue('evidencia_fecha#' . $contador_evidencias, $valor['evidencia_fecha_texto']);
                 if (file_exists(UPLOADS . $valor['evidencia_fotografia'])) {
-                    $templateProcessor->setImageValue('evidencia_fotografia', array('path' => UPLOADS . $valor['evidencia_fotografia'], 'width' => 720, 'height' => 480));
+                    $templateProcessor->setImageValue('evidencia_fotografia#' . $contador_evidencias, array('path' => UPLOADS . $valor['evidencia_fotografia'], 'width' => 720, 'height' => 480));
                 } else {
-                    $templateProcessor->setValue('evidencia_fotografia', $valor['evidencia_fotografia']);
+                    $templateProcessor->setValue('evidencia_fotografia#' . $contador_evidencias, $valor['evidencia_fotografia']);
                 }
             }
-
-            // Crear una variable para el nombre del archivo
-            $bitacora['nombre_archivo'] = $bitacora['acreditado_folio'] . ' ' . $bitacora['acreditado_nombre'] . ' - Bitácora.docx';
-            $bitacora['fecha_creacion'] = $fecha_actual;
 
             // Se decodifica el nombre del archivo en UTF-8 para descargarlo
             $nombre_archivo_decodificado = rawurlencode($bitacora['nombre_archivo']);
