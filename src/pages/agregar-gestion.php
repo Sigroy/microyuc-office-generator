@@ -39,8 +39,6 @@ if (!$id) {
         $date_formatter->setPattern("EEEE d 'de' MMMM 'de' yyyy");
 
         $time_zone_CMX = new DateTimeZone('America/Mexico_City');
-        $fecha_actual_CMX = new DateTime('now', $time_zone_CMX);
-        $fecha_actual = $fecha_actual_CMX->format('Y-m-d H:i:s');
 
         $gestion['gestion_fecha'] = $_POST['gestion_fecha'];
         $gestion['gestion_via'] = $_POST['gestion_via'];
