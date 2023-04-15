@@ -1,0 +1,56 @@
+{% extends 'layout.html' %}
+{% block title %}Administrar gestiones{% endblock %}
+{% block content %}
+    <main>
+        <div class="main__app">
+            <div class="main__header">
+                <h1 class="main__title">Administrar gestiones de {{ bitacora.acreditado_nombre }}</h1>
+                <a href="{{ doc_root }}bitacoras" class="main__btn main__btn--main">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="main__icon" fill="none" viewBox="0 0 24 24"
+                         stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                              d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                    </svg>
+                    Gestionar bitácoras
+                </a>
+            </div>
+            <div>
+                {% if exito %}<p>{{ exito }}</p>{% endif %}
+                {% if error %}<p>{{ error }}</p>{% endif %}
+                <table class="table">
+                    <thead class="table__head">
+                    <tr class="table__row--head">
+                        <th scope="col" class="table__head">
+                            Fecha
+                        </th>
+                        <th scope="col" class="table__head table__data--left">
+                            Vía
+                        </th>
+                        <th scope="col" class="table__head table__data--left">
+                            Comentarios
+                        </th>
+                        <th scope="col" class="table__head table__data--left">
+                            Acción
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody class="table__body">
+                    {% for gestion in gestiones %}
+                        <tr class="table__row--body">
+                            <td class="table__data table__data--left">{{ gestion.gestion_fecha|date('d-m-Y') }}</td>
+                            <td class="table__data table__data--left">{{ gestion.gestion_via }}</td>
+                            <td class="table__data table__data--left">{{ gestion.gestion_comentarios }}</td>
+                            <td class="table__data"><a class="table__data--red"
+                                                       href="{{ doc_root }}administrar-gestion/{{ bitacora.id }}/{{ gestion.id }}">Eliminar</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+    </div>
+    </body>
+    </html>
+{% endblock %}

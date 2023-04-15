@@ -11,6 +11,18 @@ class Gestion
         $this->db = $db;
     }
 
+    public function getById(string|int $id): array|false
+    {
+        try {
+            $sql = "SELECT *
+                    FROM gestion
+                    WHERE id = :id;";
+            return $this->db->runSQL($sql, [$id])->fetch();
+        } catch (\PDOException) {
+            return false;
+        }
+    }
+
     public function getByBitacoraId(string|int $id): array|false
     {
         try {
@@ -52,6 +64,17 @@ class Gestion
             } else {
                 throw $e;
             }
+        }
+    }
+
+    public function delete(string|int $id): int|bool
+    {
+        try {
+            $sql = "DELETE FROM gestion
+                    WHERE id = :id;";
+            return $this->db->runSQL($sql, [$id])->rowCount();
+        } catch (\PDOException) {
+            return false;
         }
     }
 }
