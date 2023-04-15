@@ -15,6 +15,10 @@ if ($page !== 'login') {
     is_admin($sesion->rol);
 }
 
+if ($page === 'administrar-gestion' && $parts[2]) {
+    $gestion_id = filter_var($parts[2], FILTER_VALIDATE_INT);
+}
+
 $php_page = APP_ROOT . '/src/pages/' . $page . '.php';
 
 if (!file_exists($php_page)) {
