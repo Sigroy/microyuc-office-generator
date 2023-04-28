@@ -93,13 +93,13 @@ VALUES (null, 'Admin', 'admin', '123456789@MY');
 CREATE TABLE actividad
 (
     id         INT(11)                                 NOT NULL AUTO_INCREMENT,
-    recurso    VARCHAR(254) COLLATE utf8mb4_unicode_ci NOT NULL,
+    documento  VARCHAR(254) COLLATE utf8mb4_unicode_ci NOT NULL,
     accion     VARCHAR(254) COLLATE utf8mb4_unicode_ci NOT NULL,
     cliente    VARCHAR(254) COLLATE utf8mb4_unicode_ci NOT NULL,
     fecha_hora TIMESTAMP                               NOT NULL,
     usuario_id INT(11)                                 NOT NULL,
     PRIMARY KEY (id),
-    CONSTRAINT FK_actividad_usuario FOREIGN KEY (usuario_id) REFERENCES usuario (id)
+    CONSTRAINT FK_actividad_usuario FOREIGN KEY (usuario_id) REFERENCES usuario (id) ON DELETE CASCADE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci;

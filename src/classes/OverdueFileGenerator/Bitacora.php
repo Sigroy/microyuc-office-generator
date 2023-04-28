@@ -108,6 +108,11 @@ class Bitacora
                 $this->db->runSQL($sql, $evidencia);
             }
 
+            $sql = "INSERT INTO actividad (documento, accion, cliente, fecha_hora, usuario_id) 
+                    VALUES ('Bitácora', 'Generar', :nombre_cliente, :fecha_creacion, " . $_SESSION['id'] . ");";
+
+            $this->db->runSQL($sql, [$bitacora['acreditado_nombre'], $bitacora['fecha_creacion']]);
+
             $this->db->commit();
             return true;
         } catch (\PDOException $e) {

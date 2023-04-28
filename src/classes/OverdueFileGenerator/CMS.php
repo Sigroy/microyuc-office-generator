@@ -11,6 +11,7 @@ class CMS
     protected ?Evidencia $evidencia = null;
     protected ?Sesion $sesion = null;
     protected ?Usuario $usuario = null;
+    protected ?Actividad $actividad = null;
 
     public function __construct($dsn, $username, $password)
     {
@@ -64,6 +65,14 @@ class CMS
         }
 
         return $this->usuario;
+    }
+
+    public function getActividad()
+    {
+        if ($this->actividad === null) {
+            $this->actividad = new Actividad($this->db);
+        }
+        return $this->actividad;
     }
 
 }

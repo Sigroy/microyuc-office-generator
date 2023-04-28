@@ -1,3 +1,13 @@
+@use "../abstracts/index" as a;
+
 .hidden {
   display: none;
+}
+
+.margin-top-lg {
+  margin-top: a.rem(60);
+}
+
+.margin-top-m {
+  margin-top: a.rem(10);
 }

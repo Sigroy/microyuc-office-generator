@@ -41,6 +41,8 @@ class Carta
     public function create(array $carta): bool
     {
         try {
+            $this->db->beginTransaction();
+
             if (isset($carta['fecha_visita'])) {
                 $sql = "INSERT INTO carta (fecha_creacion, fecha_visita, numero_expediente, nombre_cliente, calle,
                    cruzamientos, numero_direccion, colonia_fraccionamiento, localidad, municipio, fecha_firma,
@@ -65,8 +67,16 @@ class Carta
                            :mensualidades_vencidas, :adeudo_total, :nombre_archivo);";
             }
             $this->db->runSQL($sql, $carta);
+
+            $sql = "INSERT INTO actividad (documento, accion, cliente, fecha_hora, usuario_id) 
+                    VALUES ('Carta', 'Generar', :nombre_cliente, :fecha_creacion, " . $_SESSION['id'] . ");";
+
+            $this->db->runSQL($sql, [$carta['nombre_cliente'], $carta['fecha_creacion']]);
+
+            $this->db->commit();
             return true;
-        } catch (\PDOException $e) {
+        } catch (\PDOException) {
+            $this->db->rollBack();
             return false;
         }
     }

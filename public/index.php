@@ -8,14 +8,15 @@ $parts = explode('/', $path);
 
 $page = $parts[0] ?: 'inicio';
 $id = $parts[1] ?? null;
-
-$id = filter_var($id, FILTER_VALIDATE_INT);
+$gestion_id = $parts[2] ?? null;
 
 if ($page !== 'login') {
     is_admin($sesion->rol);
 }
 
-if ($page === 'administrar-gestion' && $parts[2]) {
+$id = filter_var($id, FILTER_VALIDATE_INT);
+
+if ($page === 'administrar-gestion' && $gestion_id) {
     $gestion_id = filter_var($parts[2], FILTER_VALIDATE_INT);
 }
 

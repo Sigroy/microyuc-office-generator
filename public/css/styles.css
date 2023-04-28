@@ -213,6 +213,14 @@ body {
   display: none;
 }
 
+.margin-top-lg {
+  margin-top: 3.75rem;
+}
+
+.margin-top-m {
+  margin-top: 0.625rem;
+}
+
 .login__container .login__form, .login__container, .login {
   display: flex;
   justify-content: center;

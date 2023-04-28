@@ -1,34 +1,71 @@
 {% extends 'layout.html' %}
 {% block title %}Inicio{% endblock %}
 {% block content %}
-<main>
-    <div class="dashboard__home">
-        <div class="dashboard__card">
-            <h2 class="card__title">
-                <svg xmlns="http://www.w3.org/2000/svg" class="card__icon" fill="none"
-                     viewBox="0 0 24 24"
-                     stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                          d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
-                </svg>
-                Cartas generadas
-            </h2>
-            <a href="{{ doc_root }}cartas" class="card__number">{{ num_cartas }}</a>
+    <main>
+        <div class="dashboard__home">
+            <div class="dashboard__card">
+                <h2 class="card__title">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="card__icon" fill="none"
+                         viewBox="0 0 24 24"
+                         stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                              d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                    </svg>
+                    Cartas generadas
+                </h2>
+                <a href="{{ doc_root }}cartas" class="card__number">{{ num_cartas }}</a>
+            </div>
+            <div class="dashboard__card">
+                <h2 class="card__title">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="card__icon" fill="none"
+                         viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                    </svg>
+                    Bitácoras generadas
+                </h2>
+                <a href="{{ doc_root }}bitacoras" class="card__number">{{ num_bitacoras }}</a>
+            </div>
         </div>
-        <div class="dashboard__card">
-            <h2 class="card__title">
-                <svg xmlns="http://www.w3.org/2000/svg" class="card__icon" fill="none"
-                     viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                          d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                </svg>
-                Bitácoras generadas
-            </h2>
-            <a href="{{ doc_root }}bitacoras" class="card__number">{{ num_bitacoras }}</a>
+        <div class="main__app margin-top-lg">
+            <div>
+                <h1 class="main__title">Actividad reciente</h1>
+            </div>
+            <table class="table">
+                <thead class="table__head">
+                <tr class="table__row--head">
+                    <th scope="col" class="table__head">
+                        Usuario
+                    </th>
+                    <th scope="col" class="table__head table__data--left">
+                        Documento
+                    </th>
+                    <th scope="col" class="table__head table__data--left">
+                        Cliente
+                    </th>
+                    <th scope="col" class="table__head">
+                        Acción
+                    </th>
+                    <th scope="col" class="table__head">
+                        Fecha
+                    </th>
+                </tr>
+                </thead>
+                <tbody class="table__body">
+                {% for actividad in actividades %}
+                    <tr class="table__row--body">
+                        <td class="table__data table__data--left">{{ actividad.nombre_usuario }}</td>
+                        <td class="table__data table__data--left">{{ actividad.documento }}</td>
+                        <td class="table__data table__data--left">{{ actividad.cliente }}</td>
+                        <td class="table__data table__data--left">{{ actividad.accion }}</td>
+                        <td class="table__data table__data--left">{{ actividad.fecha_hora|date('d-m-Y H:i') }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
         </div>
+    </main>
     </div>
-</main>
-</div>
-</body>
-</html>
+    </body>
+    </html>
 {% endblock %}
