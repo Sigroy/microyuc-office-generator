@@ -8,7 +8,7 @@ define("DOC_ROOT", $carpeta_padre . DIRECTORY_SEPARATOR . ROOT_FOLDER . DIRECTOR
 
 // Configuración de la base de datos
 $type = 'mysql';
-$server = 'localhost';
+$server = 'microyuc-project.cldoq9azsv2y.us-east-1.rds.amazonaws.com';
 $db = 'microyuc_project';
 $port = '3306';
 $charset = 'utf8mb4';
