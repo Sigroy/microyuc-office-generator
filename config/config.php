@@ -1,5 +1,5 @@
 <?php
-define('DEV', false);
+define('DEV', true);
 define('ROOT_FOLDER', 'public');
 
 $esta_carpeta = substr(__DIR__, strlen($_SERVER['DOCUMENT_ROOT'])); // Carpeta en la que está este archivo
