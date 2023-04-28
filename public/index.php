@@ -20,10 +20,10 @@ if ($page === 'administrar-gestion' && $gestion_id) {
     $gestion_id = filter_var($parts[2], FILTER_VALIDATE_INT);
 }
 
-$php_page = APP_ROOT . '/src/pages/' . $page . '.php';
+$php_page = '../src/pages/' . $page . '.php';
 
 if (!file_exists($php_page)) {
-    $php_page = APP_ROOT . '/src/pages/pagina-no-encontrada.php';
+    $php_page = '../src/pages/pagina-no-encontrada.php';
 }
 
 require $php_page;

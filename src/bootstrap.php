@@ -1,9 +1,9 @@
 <?php
-define('APP_ROOT', dirname(__DIR__)); // Directorio raíz
+// define('APP_ROOT', dirname(__DIR__)); // Directorio raíz
 
-require APP_ROOT . '/src/functions.php';
-require APP_ROOT . '/config/config.php';
-require APP_ROOT . '/vendor/autoload.php';
+require '../src/functions.php';
+require '../config/config.php';
+require '../vendor/autoload.php';
 
 if (DEV === false) {
     set_exception_handler('handle_exception');           // Establecer manejo de excepciones
@@ -14,10 +14,10 @@ if (DEV === false) {
 $cms = new Microyuc\OverdueFileGenerator\CMS($dsn, $username, $password);
 unset($dsn, $username, $password);
 
-$twig_options['cache'] = APP_ROOT . '/var/cache';
+$twig_options['cache'] = '../var/cache';
 $twig_options['debug'] = DEV;
 
-$loader = new Twig\Loader\FilesystemLoader(APP_ROOT . '/templates');
+$loader = new Twig\Loader\FilesystemLoader('../templates');
 $twig = new Twig\Environment($loader, $twig_options);
 
 //$twig->addGlobal('doc_root', DOC_ROOT);
