@@ -3,7 +3,7 @@
 require '../src/bootstrap.php';
 
 $path = mb_strtolower($_SERVER['REQUEST_URI']);
-$path = substr($path, strlen(DOC_ROOT));
+$path = ltrim($path, '/');
 $parts = explode('/', $path);
 
 $page = $parts[0] ?: 'inicio';

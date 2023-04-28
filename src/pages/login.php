@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 // Revisa si la sesión actual tiene de rol admin para redireccionar al usuario a la página de inicio
 if ($sesion->rol === 'admin') {
-    header("Location: " . DOC_ROOT);
+    header("Location: /");
     exit;
 }
 

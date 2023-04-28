@@ -20,7 +20,7 @@ $twig_options['debug'] = DEV;
 $loader = new Twig\Loader\FilesystemLoader(APP_ROOT . '/templates');
 $twig = new Twig\Environment($loader, $twig_options);
 
-$twig->addGlobal('doc_root', DOC_ROOT);
+//$twig->addGlobal('doc_root', DOC_ROOT);
 
 $sesion = $cms->getSesion();
 $twig->addGlobal('sesion', $sesion);

@@ -5,7 +5,7 @@
         <div class="main__app">
             <div class="main__header">
                 <h1 class="main__title">Administrar gestiones de {{ bitacora.acreditado_nombre }}</h1>
-                <a href="{{ doc_root }}bitacoras" class="main__btn main__btn--main">
+                <a href="/bitacoras" class="main__btn main__btn--main">
                     <svg xmlns="http://www.w3.org/2000/svg" class="main__icon" fill="none" viewBox="0 0 24 24"
                          stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -41,7 +41,7 @@
                             <td class="table__data table__data--left">{{ gestion.gestion_via }}</td>
                             <td class="table__data table__data--left">{{ gestion.gestion_comentarios }}</td>
                             <td class="table__data"><a class="table__data--red"
-                                                       href="{{ doc_root }}administrar-gestion/{{ bitacora.id }}/{{ gestion.id }}">Eliminar</a>
+                                                       href="/administrar-gestion/{{ bitacora.id }}/{{ gestion.id }}">Eliminar</a>
                             </td>
                         </tr>
                     {% endfor %}

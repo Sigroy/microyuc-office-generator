@@ -11,4 +11,4 @@ php_value  date.timezone       "America/Mexico_City"
 
 RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule . public/index.php [L]
+RewriteRule . index.php [L]

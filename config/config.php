@@ -2,15 +2,15 @@
 define('DEV', true);
 define('ROOT_FOLDER', 'public');
 
-$esta_carpeta = substr(__DIR__, strlen($_SERVER['DOCUMENT_ROOT'])); // Carpeta en la que está este archivo
-$carpeta_padre = dirname($esta_carpeta);                      // Carpeta padre de esta carpeta
-define("DOC_ROOT", $carpeta_padre . DIRECTORY_SEPARATOR . ROOT_FOLDER . DIRECTORY_SEPARATOR);             // Raíz documento
+//$esta_carpeta = substr(__DIR__, strlen($_SERVER['DOCUMENT_ROOT'])); // Carpeta en la que está este archivo
+//$carpeta_padre = dirname($esta_carpeta);                      // Carpeta padre de esta carpeta
+//define("DOC_ROOT", "");             // Raíz documento
 
 // Configuración de la base de datos
 $type = 'mysql';
-$server = 'microyuc-project.cldoq9azsv2y.us-east-1.rds.amazonaws.com';
+$server = 'localhost';
 $db = 'microyuc_project';
-$port = '3306';
+$port = '3307';
 $charset = 'utf8mb4';
 $username = 'microyuc';
 $password = 'NYyQaw1Mdrn1[wVt';
