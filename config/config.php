@@ -1,5 +1,5 @@
 <?php
-define('DEV', true);
+define('DEV', false);
 define('ROOT_FOLDER', 'public');
 
 $esta_carpeta = substr(__DIR__, strlen($_SERVER['DOCUMENT_ROOT'])); // Carpeta en la que está este archivo
@@ -10,7 +10,7 @@ define("DOC_ROOT", $carpeta_padre . DIRECTORY_SEPARATOR . ROOT_FOLDER . DIRECTOR
 $type = 'mysql';
 $server = 'localhost';
 $db = 'microyuc_project';
-$port = '3307';
+$port = '3306';
 $charset = 'utf8mb4';
 $username = 'microyuc';
 $password = 'NYyQaw1Mdrn1[wVt';
