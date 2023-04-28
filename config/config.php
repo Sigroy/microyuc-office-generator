@@ -8,9 +8,9 @@ define('ROOT_FOLDER', 'public');
 
 // Configuración de la base de datos
 $type = 'mysql';
-$server = 'localhost';
+$server = 'microyuc-project.cldoq9azsv2y.us-east-1.rds.amazonaws.com';
 $db = 'microyuc_project';
-$port = '3307';
+$port = '3306';
 $charset = 'utf8mb4';
 $username = 'microyuc';
 $password = 'NYyQaw1Mdrn1[wVt';
