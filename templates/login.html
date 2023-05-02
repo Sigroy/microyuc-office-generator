@@ -5,18 +5,18 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="{{ doc_root }}css/styles.css">
-    <link rel="icon" type="image/x-icon" href="{{ doc_root }}img/favicon.ico">
+    <link rel="stylesheet" href="./css/styles.css">
+    <link rel="icon" type="image/x-icon" href="./img/favicon.ico">
     <title>Microyuc | Inicio de sesión</title>
 </head>
 <body>
 <div class="login">
-    <img src="{{ doc_root }}img/microyucfondo.png" alt="Logo de Microyuc" class="login__img">
+    <img src="./img/microyucfondo.png" alt="Logo de Microyuc" class="login__img">
     {% if errores.mensaje %}<p>{{ errores.mensaje }}</p>{% endif %}
     <div class="login__container">
         <h1 class="login__title">Iniciar sesión</h1>
         <p class="login__subtitle">Introduce tus credenciales para iniciar sesión.</p>
-        <form action="{{ doc_root }}login" method="post" class="login__form">
+        <form action="./login" method="post" class="login__form">
             <label for="usuario">
                 <input type="text" id="usuario" name="usuario" placeholder="Usuario" class="login__input"
                        value="{{ usuario }}" required>
